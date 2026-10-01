@@ -1,10 +1,14 @@
 package application;
+import at.favre.lib.crypto.bcrypt.BCrypt;
 import exceptions.ConversionImpossibleException;
 import exceptions.SaisieInvalideException;
+import exceptions.VideoIntrouvableException;
+import exceptions.VideothequeVideException;
 import modele.*;
 import video.LecteurVideo;
 
 import java.io.File;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -27,8 +31,7 @@ public class Controller {
         System.out.println("3. Rechercher une vidéo");
         System.out.println("4. Supprimer une vidéo");
         System.out.println("5. Lire une video");
-        System.out.println("6. Arrêter une video");
-        System.out.println("7. Convertir une vidéo");
+        System.out.println("6. Convertir une vidéo");
         System.out.println("0. Quitter");
         System.out.println("=====================================");
     }
@@ -40,14 +43,31 @@ public class Controller {
         if (fichiers==null) {
             return;
         }
-        for(File f : fichiers) {
-            if(f.getName().endsWith(pointExtension)) {
-                FichierVideo fv = new FichierVideo(f.getName().replace(pointExtension, ""), f.getName().replace(pointExtension, "Auteur"),
-                        LocalDate.now(), 0) {
-                };
-                videotheque.ajouterVideo(fv);
+        if(extension.toLowerCase() == "mp4") {
+            for(File f : fichiers) {
+                if(f.getName().endsWith(pointExtension)) {
+                    FichierVideo fv = new VideoMp4(f.getName().replace(pointExtension, ""), f.getName().replace(pointExtension, "Auteur"),
+                            LocalDate.now(), 0) {
+                    };
+                    videotheque.ajouterVideo(fv);
+                }
             }
+            return;
         }
+
+        if(extension.toLowerCase() == "avi") {
+            for(File f : fichiers) {
+                if(f.getName().endsWith(pointExtension)) {
+                    FichierVideo fv = new VideoAvi(f.getName().replace(pointExtension, ""), f.getName().replace(pointExtension, "Auteur"),
+                            LocalDate.now(), 0) {
+                    };
+                    videotheque.ajouterVideo(fv);
+                }
+            }
+            return;
+        }
+        System.out.println("Problème d'extension de fichier (AVI/MP4)");
+        return;
     }
 
     public void ajouterVideo() {
@@ -174,13 +194,13 @@ public class Controller {
         }
     }
 
-    public static void convertirVideo() {
+    public void convertirVideo() {
         try {
             String titre = saisieString("Saisir le nom du fichier à convertir : ");
             String format = saisieString("Saisir le format de conversion : ");
             v.convertirVideo(titre, format);
-        } catch (VideoIntrouvableException | VideothequeVideException |
-                 ConversionImpossibleException | SaisieInvalideException e) {
+        } catch (VideoIntrouvableException | VideothequeVideException | ConversionImpossibleException |
+                 SaisieInvalideException | IOException | InterruptedException e) {
             System.out.println(e.getMessage());
         }
     }
@@ -189,4 +209,12 @@ public class Controller {
         String titre = saisieString("Saisir le titre de la video à regarder : ");
         v.lireVideo(titre);
     }
+
+//    public static String hashPassword(String password) {
+//        // Définir
+//        int logRounds = 12;
+//
+//        String salt = BCrypt.gensalt(logRounds);
+//        return BCrypt.hashpw(password, salt);
+//    }
 }
