@@ -34,12 +34,6 @@ public class Main {
                     case 6:
                         //TODO
                         break;
-                    case 7:
-                        //TODO
-                        break;
-                    case 8:
-                        //TODO
-                        break;
                     case 0:
                         System.out.println("Au revoir !");
                         Controller.scan.close();
@@ -48,7 +42,8 @@ public class Main {
                     default:
                         System.out.println("\u001B[31mChoix invalide, veuillez réessayer.\u001B[0m");
                 }
-            } catch (SaisieInvalideException e) {
+            } catch (ConversionImpossibleException | LectureImpossibleException | VideoDejaExistanteException |
+                     SaisieInvalideException | VideoIntrouvableException | VideothequeVideException e) {
                 System.out.println(e.getMessage());
             } catch (InputMismatchException ime) {
                 Controller.scan.nextLine();

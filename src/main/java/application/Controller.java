@@ -9,18 +9,17 @@ import java.util.Scanner;
 public class Controller {
     public static Scanner scan = new Scanner(System.in);
     private static final List<String> formatAccepte = List.of("aac", "mp3", "flac", "wav");
+    private static final List<String> formatFichierNumAccepte = List.of("AVI", "MP4");
 
     // Affiche le menu principal
     public void afficherMenu() {
         System.out.println("===== GESTION DE LA VIDÉOTHEQUE =====");
-        System.out.println("1. ");
-        System.out.println("2. ");
-        System.out.println("3. ");
-        System.out.println("4. ");
-        System.out.println("5. ");
-        System.out.println("6. ");
-        System.out.println("7. ");
-        System.out.println("8. ");
+        System.out.println("1. Ajouter une video");
+        System.out.println("2. Lister toutes les videos");
+        System.out.println("3. Rechercher une video");
+        System.out.println("4. Supprimer une video");
+        System.out.println("5. Lire une video");
+        System.out.println("6. Convertir une video");
         System.out.println("0. Quitter");
         System.out.println("=====================================");
     }
