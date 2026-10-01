@@ -1,5 +1,8 @@
 package application;
 import exceptions.SaisieInvalideException;
+import modele.GestionVideotheque;
+import modele.Video;
+
 import modele.FichierVideo;
 
 import java.io.File;
@@ -93,4 +96,11 @@ public class Controller {
         }
     }
 
+
+    public void lectureVideo(GestionVideotheque videotheque) {
+        String titre = saisieNom("Saisir le titre de la video à regarder : ");
+        Video v = videotheque.rechercherVideo(titre);
+        //if(!(v instanceof VideoAvi avi | v instanceof VideoMp4 mp4))
+
+    }
 }
