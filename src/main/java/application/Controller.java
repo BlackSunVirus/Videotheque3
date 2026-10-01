@@ -1,6 +1,9 @@
 package application;
+import at.favre.lib.crypto.bcrypt.BCrypt;
 import exceptions.ConversionImpossibleException;
 import exceptions.SaisieInvalideException;
+import exceptions.VideoIntrouvableException;
+import exceptions.VideothequeVideException;
 import modele.*;
 import video.LecteurVideo;
 
@@ -40,14 +43,31 @@ public class Controller {
         if (fichiers==null) {
             return;
         }
-        for(File f : fichiers) {
-            if(f.getName().endsWith(pointExtension)) {
-                FichierVideo fv = new FichierVideo(f.getName().replace(pointExtension, ""), f.getName().replace(pointExtension, "Auteur"),
-                        LocalDate.now(), 0) {
-                };
-                videotheque.ajouterVideo(fv);
+        if(extension.toLowerCase() == "mp4") {
+            for(File f : fichiers) {
+                if(f.getName().endsWith(pointExtension)) {
+                    FichierVideo fv = new VideoMp4(f.getName().replace(pointExtension, ""), f.getName().replace(pointExtension, "Auteur"),
+                            LocalDate.now(), 0) {
+                    };
+                    videotheque.ajouterVideo(fv);
+                }
             }
+            return;
         }
+
+        if(extension.toLowerCase() == "avi") {
+            for(File f : fichiers) {
+                if(f.getName().endsWith(pointExtension)) {
+                    FichierVideo fv = new VideoAvi(f.getName().replace(pointExtension, ""), f.getName().replace(pointExtension, "Auteur"),
+                            LocalDate.now(), 0) {
+                    };
+                    videotheque.ajouterVideo(fv);
+                }
+            }
+            return;
+        }
+        System.out.println("Problème d'extension de fichier (AVI/MP4)");
+        return;
     }
 
     public void ajouterVideo() {
@@ -205,4 +225,12 @@ public class Controller {
         lecteur.arreter(); // TODO arrete la lecture
         System.out.println("Lecture arrêtée à " + (tempsMs / 1000) + " secondes");
     }
+
+//    public static String hashPassword(String password) {
+//        // Définir
+//        int logRounds = 12;
+//
+//        String salt = BCrypt.gensalt(logRounds);
+//        return BCrypt.hashpw(password, salt);
+//    }
 }
