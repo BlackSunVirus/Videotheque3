@@ -34,9 +34,6 @@ public class Main {
                         c.lectureVideo();
                         break;
                     case 6:
-                        c.arreterLecture();
-                        break;
-                    case 7:
                         c.convertirVideo();
                         break;
                     case 0:
