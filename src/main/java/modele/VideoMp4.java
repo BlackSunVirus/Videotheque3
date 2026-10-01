@@ -6,8 +6,8 @@ import java.util.List;
 public class VideoMp4 extends FichierVideo {
 
 
-    public VideoMp4(String titre, String realistaeur, LocalDate dateSortie, int duree, String chemin) {
-        super(titre, realistaeur, dateSortie, duree, chemin);
+    public VideoMp4(String titre, String realistaeur, LocalDate dateSortie, int duree) {
+        super(titre, realistaeur, dateSortie, duree);
     }
 
     @Override
