@@ -94,6 +94,8 @@ public class Videotheque implements GestionVideotheque {
         if (!(fichierAconvertir.getSupport().equalsIgnoreCase("mp4") ||
                 fichierAconvertir.getSupport().equalsIgnoreCase("avi")))
             throw new ConversionImpossibleException("Format du fichier invalide (mp4 ou avi seulement).");
+        if (fichierAconvertir.getSupport().equalsIgnoreCase(formatCible))
+            throw new ConversionImpossibleException("Le fichier est déjà au format " + formatCible + ".");
         fichierConverti = fichierAconvertir.convertir(formatCible);
         int index = videotheque.indexOf(fichierAconvertir);
         videotheque.set(index, fichierConverti);
