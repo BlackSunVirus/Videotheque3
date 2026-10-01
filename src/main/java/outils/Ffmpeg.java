@@ -58,16 +58,10 @@ public final class Ffmpeg {
         //System.out.println(commande);
 
         ProcessBuilder pb = new ProcessBuilder(commande);
-        pb.redirectErrorStream(true);          // stderr fusionné dans stdout
+
+        pb.redirectOutput(ProcessBuilder.Redirect.DISCARD);
+        pb.redirectError(ProcessBuilder.Redirect.DISCARD);
         Process processus = pb.start();
-        try (BufferedReader sortieProcessus = new BufferedReader(new InputStreamReader(processus.getInputStream()))) {
-            String line;
-            while ((line = sortieProcessus.readLine()) != null) {
-                System.out.println(line);
-            }
-        } catch (IOException e) {
-            System.out.println("Erreur de lecture du fichier.");
-        }
         return processus.waitFor();
     }
 
