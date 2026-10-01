@@ -18,8 +18,7 @@ public class Dvd extends Video {
 
     @Override
     public String getSupport() {
-        // TODO
-        return "";
+        return "DVD";
     }
 
     @Override
