@@ -26,11 +26,11 @@ public abstract class Video implements Lisible {
         this.titre = titre;
     }
 
-    public String getrealisateur() {
+    public String getRealisateur() {
         return realisateur;
     }
 
-    public void setrealisateur(String realisateur) {
+    public void setRealisateur(String realisateur) {
         this.realisateur = realisateur;
     }
 
