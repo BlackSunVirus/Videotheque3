@@ -6,8 +6,8 @@ import java.util.List;
 
 public class VideoAvi extends FichierVideo {
 
-    public VideoAvi(String titre, String realistaeur, LocalDate dateSortie, int duree) {
-        super(titre, realistaeur, dateSortie, duree);
+    public VideoAvi(String titre, String realisateur, LocalDate dateSortie, int duree) {
+        super(titre, realisateur, dateSortie, duree);
     }
 
     @Override

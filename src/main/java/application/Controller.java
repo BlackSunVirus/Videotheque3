@@ -1,9 +1,12 @@
 package application;
 import exceptions.ConversionImpossibleException;
 import exceptions.SaisieInvalideException;
-import exceptions.VideoIntrouvableException;
-import exceptions.VideothequeVideException;
+import modele.GestionVideotheque;
+import modele.Video;
 
+import modele.FichierVideo;
+
+import java.io.File;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
