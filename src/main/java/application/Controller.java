@@ -1,5 +1,11 @@
 package application;
 import exceptions.SaisieInvalideException;
+import modele.GestionVideotheque;
+import modele.Video;
+
+import modele.FichierVideo;
+
+import java.io.File;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -12,18 +18,35 @@ public class Controller {
 
     // Affiche le menu principal
     public void afficherMenu() {
-        System.out.println("===== GESTION DE LA VIDÉOTHEQUE =====");
+        System.out.println("===== GESTION DE LA VIDÉOTHÈQUE =====");
         System.out.println("1. Ajouter une video");
-        System.out.println("2. Lister toutes les videos");
-        System.out.println("3. Rechercher une video");
-        System.out.println("4. Supprimer une video");
+        System.out.println("2. Lister toutes les vidéos");
+        System.out.println("3. Rechercher une vidéo");
+        System.out.println("4. Supprimer une vidéo");
         System.out.println("5. Lire une video");
-        System.out.println("6. Convertir une video");
+        System.out.println("6. Convertir une vidéo");
         System.out.println("0. Quitter");
         System.out.println("=====================================");
     }
 
-    public String saisieNom(String msg) throws SaisieInvalideException {
+    public void peuplerVideotheque(String extension) {
+        String pointExtension = "." + extension;
+        File dossier = new File("media/");
+        File[] fichiers = dossier.listFiles();
+        if (fichiers==null) {
+            return;
+        }
+        for(File f : fichiers) {
+            if(f.getName().endsWith(pointExtension)) {
+                FichierVideo fv = new FichierVideo(f.getName().replace(pointExtension, ""), f.getName().replace(pointExtension, "Auteur"),
+                        LocalDate.now(), 0) {
+                };
+                videotheque.ajouterVideo(fv);
+            }
+        }
+    }
+
+    public String saisieString(String msg) throws SaisieInvalideException {
         System.out.println(msg);
         String nom = scan.nextLine();
         if (nom.isEmpty()) {
@@ -73,4 +96,11 @@ public class Controller {
         }
     }
 
+
+    public void lectureVideo(GestionVideotheque videotheque) {
+        String titre = saisieNom("Saisir le titre de la video à regarder : ");
+        Video v = videotheque.rechercherVideo(titre);
+        //if(!(v instanceof VideoAvi avi | v instanceof VideoMp4 mp4))
+
+    }
 }
