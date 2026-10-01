@@ -2,23 +2,28 @@ package video;
 
 import exceptions.ConversionImpossibleException;
 import modele.FichierVideo;
+import outils.Ffmpeg;
 
+import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 public class ConvertisseurVideo implements Runnable {
 
-    private FichierVideo fichierVideo;
-    private String formatCible;
+    File entree;
+    File sortie;
+    List<String> options;
     private Thread thread;
 
-    public ConvertisseurVideo(FichierVideo fichierVideo, String formatCible) {
-        this.fichierVideo = fichierVideo;
-        this.formatCible = formatCible;
+    public ConvertisseurVideo(File entree, File sortie, List<String> options) {
+        this.entree = entree;
+        this.sortie = sortie;
+        this.options = options;
     }
 
     public void demarrer() {
         thread = new Thread(this);
-        thread.setName("Convertisseur-" + fichierVideo.getTitre());
+        thread.setName("Convertisseur-" + entree.getAbsolutePath());
         thread.setDaemon(true);
         thread.start();
         System.out.println(Thread.currentThread().getName() + " - Lancement du thread de conversion.");
@@ -28,7 +33,8 @@ public class ConvertisseurVideo implements Runnable {
     @Override
     public void run() {
         try {
-            fichierVideo.convertir(formatCible);
+            Ffmpeg.convertir(entree, sortie, options);
+            System.out.println("Conversion terminée !");
         } catch (ConversionImpossibleException e) {
             System.out.println(e.getMessage());
         } catch (IOException | InterruptedException e) {
