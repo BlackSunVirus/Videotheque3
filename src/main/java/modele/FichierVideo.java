@@ -3,8 +3,11 @@ package modele;
 import exceptions.ConversionImpossibleException;
 import exceptions.LectureImpossibleException;
 import exceptions.SaisieInvalideException;
+import exceptions.VideoIntrouvableException;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -17,15 +20,27 @@ public abstract class FichierVideo extends Video implements Convertible {
         this.chemin = chemin;
     }
 
-    // type File : pas sur de moi
+    // type File -> pas necessaire comme le chemin est dans les attributs (getFile)
     public File getFichier() {
         // TODO
         return null;
     }
 
-    public Double getTaille() {
+    //Récupère la taille du fichier en Mo
+    public Double getTaille(File file) {
         // TODO
-        return null;
+        if(!file.exists()) {
+            throw new VideoIntrouvableException("\u001B[31mFichier introuvable.\u001B[0m");
+        }
+
+        double tailleMo=0;
+        try {
+            long sizeInBytes = Files.size(file.toPath());
+            tailleMo = (sizeInBytes / (1024.0*1024.0));
+        } catch(IOException e) {
+            System.out.println("\u001B[31mImpossible de lire la taille du fichier " +file.getName()+"\u001B[0m");
+        }
+        return tailleMo;
     }
 
 
@@ -36,16 +51,10 @@ public abstract class FichierVideo extends Video implements Convertible {
         return null;
     }
 
-    @Override
-    public String getSupport() {
-        // TODO
-        return "";
-    }
 
     //Vérifie que le fichier existe sinon erreur
-    //Lance ffplay dans un thread daemon
+    //Lance ffplay (outils) dans un thread daemon
     //
-
     @Override
     public void lire() throws LectureImpossibleException {
         // TODO
