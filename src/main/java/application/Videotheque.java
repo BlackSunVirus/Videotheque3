@@ -6,6 +6,7 @@ import modele.FichierVideo;
 import modele.GestionVideotheque;
 import modele.Video;
 
+import java.io.File;
 import java.util.ArrayList;
 
 public class Videotheque implements GestionVideotheque {
@@ -22,11 +23,22 @@ public class Videotheque implements GestionVideotheque {
 
     @Override
     public void ajouterVideo(Video v) throws VideoDejaExistanteException, SaisieInvalideException {
-        // TODO
+        // TODO permettre les Video (Dvd...) et pour FichierVideo check si il existe bien dans media/
         for(Video video : videotheque) {
             // Ajoute uniquement les fichier de type FichierVideo ?? (instanceof)
-            if(!(v instanceof FichierVideo))
-                throw new SaisieInvalideException("Veuillez ajouter uniquement les fichiers vidéos à la vidéothèque");
+            if(v instanceof FichierVideo) {
+                File dossier = new File("media/");
+                File[] fichiers = dossier.listFiles();
+                if(fichiers==null)
+                    throw new VideoIntrouvableException("Aucune vidéo dans le dossier");
+                boolean existe = false;
+                for(File f : fichiers) {
+                    if(f.getName().endsWith(video.getSupport().toLowerCase()))
+                        existe = true;
+                }
+                if(!existe)
+                    throw new VideoIntrouvableException("Vidéo non trouvée dans le dossier");
+            }
             if(video.getTitre().equalsIgnoreCase(v.getTitre()))
                 throw new VideoDejaExistanteException("La vidéo " + v.getTitre() + " existe déjà.");
             videotheque.add(v);
