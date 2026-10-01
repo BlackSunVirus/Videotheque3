@@ -25,5 +25,6 @@ public class Dvd extends Video {
     @Override
     public void lire() throws LectureImpossibleException {
         // TODO
+        System.out.println("Prenez le DVD " + this.numero + " \"" + super.getTitre() + "\" et insérez-le dans un lecteur zone " + this.zone + ".");
     }
 }
