@@ -1,4 +1,5 @@
 package application;
+import exceptions.ConversionImpossibleException;
 import exceptions.SaisieInvalideException;
 import modele.*;
 import video.LecteurVideo;
@@ -16,6 +17,7 @@ public class Controller {
     private Videotheque videotheque = new Videotheque();
     private LecteurVideo lecteur;
     private static final List<String> formatFichierNumAccepte = List.of("AVI", "MP4");
+    private static Videotheque v = new Videotheque();
 
     // Affiche le menu principal
     public void afficherMenu() {
@@ -169,6 +171,17 @@ public class Controller {
             } catch (NumberFormatException e) {
                 System.out.println("\u001B[31mVeuillez entrer un nombre entier valide\u001B[0m");
             }
+        }
+    }
+
+    public static void convertirVideo() {
+        try {
+            String titre = saisieString("Saisir le nom du fichier à convertir : ");
+            String format = saisieString("Saisir le format de conversion : ");
+            v.convertirVideo(titre, format);
+        } catch (VideoIntrouvableException | VideothequeVideException |
+                 ConversionImpossibleException | SaisieInvalideException e) {
+            System.out.println(e.getMessage());
         }
     }
 

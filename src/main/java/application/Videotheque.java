@@ -3,6 +3,7 @@ package application;
 import exceptions.*;
 import modele.*;
 import video.ConvertisseurVideo;
+import video.LecteurVideo;
 
 import java.io.File;
 import java.io.IOException;
@@ -19,6 +20,8 @@ public class Videotheque implements GestionVideotheque {
     public Videotheque() {
         this.videotheque = new ArrayList<>();
     }
+
+    private LecteurVideo lecteur;
 
     @Override
     public void ajouterVideo(Video v) throws VideoDejaExistanteException, SaisieInvalideException {
@@ -73,7 +76,25 @@ public class Videotheque implements GestionVideotheque {
     @Override
     public void lireVideo(String titre) throws VideoIntrouvableException, VideothequeVideException, LectureImpossibleException {
         // TODO
-        rechercherVideo(titre).lire();
+        Video videoaALire = rechercherVideo(titre);
+        if(!(videoaALire instanceof VideoAvi) | !(videoaALire instanceof VideoMp4)) {
+            throw new VideoIntrouvableException("!! Erreur : '" + videoaALire.getTitre() + "est un " + videoaALire.getSupport() + " : seuls les fichiers MP4 et AVI peuvent être lus.");
+        }
+        if(lecteur!=null && lecteur.estEnCours()) {
+            arreterLecture();
+        }
+        lecteur = new LecteurVideo((FichierVideo) videoaALire);
+        lecteur.demarrer();
+        System.out.println("Lecture de '" + videoaALire.getTitre() + "' lancée. Bonne écoute !");
+
+    }
+
+    public void arreterLecture() {
+        if (lecteur==null || !lecteur.estEnCours())
+            throw new LectureImpossibleException("Il n'y a pas de lecture en cours.");
+        int tempsMs = lecteur.getPosition(); // TODO récuperer le temps de lecture
+        lecteur.arreter(); // TODO arrete la lecture
+        System.out.println("Lecture arrêtée à " + (tempsMs / 1000) + " secondes");
     }
 
     @Override
@@ -85,6 +106,8 @@ public class Videotheque implements GestionVideotheque {
         if (!(fichierAconvertir.getSupport().equalsIgnoreCase("mp4") ||
                 fichierAconvertir.getSupport().equalsIgnoreCase("avi")))
             throw new ConversionImpossibleException("Format du fichier invalide (mp4 ou avi seulement).");
+        if (fichierAconvertir.getSupport().equalsIgnoreCase(formatCible))
+            throw new ConversionImpossibleException("Le fichier est déjà au format " + formatCible + ".");
         fichierConverti = fichierAconvertir.convertir(formatCible);
         int index = videotheque.indexOf(fichierAconvertir);
         videotheque.set(index, fichierConverti);
