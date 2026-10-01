@@ -68,9 +68,14 @@ public abstract class FichierVideo extends Video implements Convertible {
         return "";
     }
 
+    //Vérifie que le fichier existe sinon erreur
+    //Lance ffplay dans un thread daemon
+    //
+
     @Override
     public void lire() throws LectureImpossibleException {
         // TODO
+        //if()
     }
 
     protected abstract List<String> optionEncodage();
