@@ -5,6 +5,7 @@ import modele.*;
 import video.ConvertisseurVideo;
 import video.LecteurVideo;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -24,12 +25,23 @@ public class Videotheque implements GestionVideotheque {
 
     @Override
     public void ajouterVideo(Video v) throws VideoDejaExistanteException, SaisieInvalideException {
-        // TODO
-        for (Video video : videotheque) {
+        // TODO permettre les Video (Dvd...) et pour FichierVideo check si il existe bien dans media/
+        for(Video video : videotheque) {
             // Ajoute uniquement les fichier de type FichierVideo ?? (instanceof)
-            if (!(v instanceof FichierVideo))
-                throw new SaisieInvalideException("Veuillez ajouter uniquement les fichiers vidéos à la vidéothèque");
-            if (video.getTitre().equalsIgnoreCase(v.getTitre()))
+            if(v instanceof FichierVideo) {
+                File dossier = new File("media/");
+                File[] fichiers = dossier.listFiles();
+                if(fichiers==null)
+                    throw new VideoIntrouvableException("Aucune vidéo dans le dossier");
+                boolean existe = false;
+                for(File f : fichiers) {
+                    if(f.getName().endsWith(video.getSupport().toLowerCase()))
+                        existe = true;
+                }
+                if(!existe)
+                    throw new VideoIntrouvableException("Vidéo non trouvée dans le dossier");
+            }
+            if(video.getTitre().equalsIgnoreCase(v.getTitre()))
                 throw new VideoDejaExistanteException("La vidéo " + v.getTitre() + " existe déjà.");
             videotheque.add(v);
         }
@@ -89,6 +101,8 @@ public class Videotheque implements GestionVideotheque {
         if (!(fichierAconvertir.getSupport().equalsIgnoreCase("mp4") ||
                 fichierAconvertir.getSupport().equalsIgnoreCase("avi")))
             throw new ConversionImpossibleException("Format du fichier invalide (mp4 ou avi seulement).");
+        if (fichierAconvertir.getSupport().equalsIgnoreCase(formatCible))
+            throw new ConversionImpossibleException("Le fichier est déjà au format " + formatCible + ".");
         fichierConverti = fichierAconvertir.convertir(formatCible);
         int index = videotheque.indexOf(fichierAconvertir);
         videotheque.set(index, fichierConverti);

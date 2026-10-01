@@ -1,19 +1,21 @@
 package application;
+import exceptions.ConversionImpossibleException;
 import exceptions.SaisieInvalideException;
-import modele.GestionVideotheque;
-import modele.Video;
-
-import modele.FichierVideo;
+import modele.*;
+import video.LecteurVideo;
 
 import java.io.File;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.List;
+import java.util.Locale;
 import java.util.Scanner;
 
 public class Controller {
     public static Scanner scan = new Scanner(System.in);
+    private Videotheque videotheque = new Videotheque();
+    private LecteurVideo lecteur;
     private static final List<String> formatFichierNumAccepte = List.of("AVI", "MP4");
     private static Videotheque v = new Videotheque();
 
@@ -25,7 +27,8 @@ public class Controller {
         System.out.println("3. Rechercher une vidéo");
         System.out.println("4. Supprimer une vidéo");
         System.out.println("5. Lire une video");
-        System.out.println("6. Convertir une vidéo");
+        System.out.println("6. Arrêter une video");
+        System.out.println("7. Convertir une vidéo");
         System.out.println("0. Quitter");
         System.out.println("=====================================");
     }
@@ -45,6 +48,80 @@ public class Controller {
                 videotheque.ajouterVideo(fv);
             }
         }
+    }
+
+    public void ajouterVideo() {
+        try {
+            int typeVideo = saisieInt("Type de vidéo (1 = DVD, 2 = FichierVideo) :");
+            if(typeVideo < 1 || typeVideo > 2)
+                throw new SaisieInvalideException("Veuillez saisir un nombre valide");
+            String titreVideo = saisieString("Saisissez le titre de la vidéo :");
+            String realisateurVideo = saisieString("Saisissez le nom du réalisateur :");
+            LocalDate dateSortie = saisieDate("Saisissez l'année de sortie jj/mm/aaaa :");
+            int dureeVideo = saisieInt("Saisissez la durée de la vidéo (minutes) :");
+
+            Video video = null;
+            if(typeVideo == 1) {
+                video = ajouterDvd(titreVideo, realisateurVideo, dateSortie, dureeVideo);
+            } else {
+                video = ajouterFichierVideo(titreVideo, realisateurVideo, dateSortie, dureeVideo);
+            }
+            if(video==null) {
+                throw new SaisieInvalideException("Impossible d'ajouter la vidéo");
+            }
+            videotheque.ajouterVideo(video);
+            System.out.println("Vidéo ajoutée avec succès !");
+        } catch (SaisieInvalideException | DateTimeParseException e) {
+            System.err.println(e.getMessage());
+        }
+    }
+
+    private Dvd ajouterDvd(String titre, String realisateur, LocalDate dateSortie, int duree) {
+        try {
+            String numeroDvd = saisieString("Saisissez le numéro du DVD --> DVD-001 :");
+            int zoneDvd = saisieInt("Saisissez la zone du DVD :");
+
+            return new Dvd(titre, realisateur, dateSortie, duree, numeroDvd, zoneDvd);
+        } catch(SaisieInvalideException e) {
+            System.err.println(e.getMessage());
+            return null;
+        }
+    }
+
+    private Video ajouterFichierVideo(String titre, String realisateur, LocalDate dateSortie, int duree) {
+        try {
+            String chemin = saisieString("Saisissez le chemin du fichier --> media/fichier.mp4 :");
+            if(chemin.toLowerCase().endsWith(".mp4")) {
+                VideoMp4 mp4 = new VideoMp4(titre, realisateur, dateSortie, duree);
+                mp4.setChemin(chemin);
+                return mp4;
+            }
+            if(chemin.toLowerCase().endsWith(".avi")) {
+                VideoAvi avi = new VideoAvi(titre, realisateur, dateSortie, duree);
+                avi.setChemin(chemin);
+                return avi;
+            }
+            throw new SaisieInvalideException("L'extension de fichier est invalide --> (avi/mp4)");
+
+        } catch(SaisieInvalideException e) {
+            System.err.println(e.getMessage());
+            return null;
+        }
+    }
+
+    public void listerVideos() {
+        videotheque.listerVideos();
+    }
+
+    public void rechercherVideo() {
+        String titreVideo = saisieString("Veuillez saisir le nom de la vidéo à afficher :");
+        Video v = videotheque.rechercherVideo(titreVideo);
+        System.out.println(v.toString());
+    }
+
+    public void supprimerVideo() {
+        String titreVideo = saisieString("Veuillez saisir le nom de la vidéo à supprimer :");
+        videotheque.supprimerVideo(titreVideo);
     }
 
     public String saisieString(String msg) throws SaisieInvalideException {
@@ -97,6 +174,16 @@ public class Controller {
         }
     }
 
+    public static void convertirVideo() {
+        try {
+            String titre = saisieString("Saisir le nom du fichier à convertir : ");
+            String format = saisieString("Saisir le format de conversion : ");
+            v.convertirVideo(titre, format);
+        } catch (VideoIntrouvableException | VideothequeVideException |
+                 ConversionImpossibleException | SaisieInvalideException e) {
+            System.out.println(e.getMessage());
+        }
+    }
 
     public void lectureVideo() {
         String titre = saisieString("Saisir le titre de la video à regarder : ");
