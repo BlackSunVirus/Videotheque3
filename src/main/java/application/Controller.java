@@ -16,6 +16,7 @@ import java.util.Scanner;
 public class Controller {
     public static Scanner scan = new Scanner(System.in);
     private static final List<String> formatFichierNumAccepte = List.of("AVI", "MP4");
+    private static Videotheque v = new Videotheque();
 
     // Affiche le menu principal
     public void afficherMenu() {
@@ -92,5 +93,8 @@ public class Controller {
     }
 
 
-
+    public void lectureVideo(GestionVideotheque videotheque) {
+        String titre = saisieString("Saisir le titre de la video à regarder : ");
+        Videotheque.lireVideo(titre);
+    }
 }

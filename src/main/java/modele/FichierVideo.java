@@ -6,6 +6,7 @@ import exceptions.SaisieInvalideException;
 import exceptions.VideoIntrouvableException;
 import outils.Ffmpeg;
 import video.ConvertisseurVideo;
+import video.LecteurVideo;
 
 import java.io.File;
 import java.io.IOException;
@@ -34,20 +35,19 @@ public abstract class FichierVideo extends Video implements Convertible {
     //Récupère la taille du fichier en Mo
     public Double getTaille(File file) {
         // TODO
-        if(!file.exists()) {
+        if (!file.exists()) {
             throw new VideoIntrouvableException("\u001B[31mFichier introuvable.\u001B[0m");
         }
 
-        double tailleMo=0;
+        double tailleMo = 0;
         try {
             long sizeInBytes = Files.size(file.toPath());
-            tailleMo = (sizeInBytes / (1024.0*1024.0));
-        } catch(IOException e) {
-            System.out.println("\u001B[31mImpossible de lire la taille du fichier " +file.getName()+"\u001B[0m");
+            tailleMo = (sizeInBytes / (1024.0 * 1024.0));
+        } catch (IOException e) {
+            System.out.println("\u001B[31mImpossible de lire la taille du fichier " + file.getName() + "\u001B[0m");
         }
         return tailleMo;
     }
-
 
 
     @Override
@@ -79,13 +79,14 @@ public abstract class FichierVideo extends Video implements Convertible {
     }
 
 
-    //Vérifie que le fichier existe sinon erreur
-    //Lance ffplay (outils) dans un thread daemon
-    //
+    //Lance ffplay (outils) dans un thread daemon (package video -> LecteurVideo)
     @Override
-    public void lire() throws LectureImpossibleException {
-        // TODO
-        //if()
+    public void lire() {
+        File fichierALIre = getFichier();
+        String nomFichier = getChemin();
+
+        LecteurVideo lv = new LecteurVideo(fichierALIre, nomFichier);
+        lv.demarrer();
     }
 
     protected abstract List<String> optionEncodage();
