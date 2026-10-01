@@ -1,5 +1,9 @@
 package application;
+
 import exceptions.SaisieInvalideException;
+import modele.GestionVideotheque;
+import modele.Video;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -33,7 +37,7 @@ public class Controller {
     }
 
     public LocalDate saisieDate(String msg) throws SaisieInvalideException {
-        while(true) {
+        while (true) {
             System.out.print(msg);
             String saisie = scan.nextLine();
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
@@ -73,4 +77,11 @@ public class Controller {
         }
     }
 
+
+    public void lectureVideo(GestionVideotheque videotheque) {
+        String titre = saisieNom("Saisir le titre de la video à regarder : ");
+        Video v = videotheque.rechercherVideo(titre);
+        //if(!(v instanceof VideoAvi avi | v instanceof VideoMp4 mp4))
+
+    }
 }
