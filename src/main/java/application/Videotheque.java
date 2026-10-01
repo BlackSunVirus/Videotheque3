@@ -1,11 +1,10 @@
 package application;
 
 import exceptions.*;
-import modele.Dvd;
-import modele.FichierVideo;
-import modele.GestionVideotheque;
-import modele.Video;
+import modele.*;
+import video.ConvertisseurVideo;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class Videotheque implements GestionVideotheque {
@@ -62,11 +61,21 @@ public class Videotheque implements GestionVideotheque {
     @Override
     public void lireVideo(String titre) throws VideoIntrouvableException, VideothequeVideException, LectureImpossibleException {
         // TODO
+        rechercherVideo(titre).lire();
     }
 
     @Override
-    public Video convertirVideo(String titre, String formatCible) throws VideoIntrouvableException, VideothequeVideException, ConversionImpossibleException, SaisieInvalideException {
-        // TODO
-        return null;
+    public Video convertirVideo(String titre, String formatCible) throws VideoIntrouvableException, VideothequeVideException, ConversionImpossibleException, SaisieInvalideException, IOException, InterruptedException {
+        FichierVideo fichierAconvertir = (FichierVideo) rechercherVideo(titre);
+        FichierVideo fichierConverti;
+        if (!(fichierAconvertir instanceof Convertible))
+            throw new ConversionImpossibleException("Le fichier n'est pas convertible.");
+        if (!(fichierAconvertir.getSupport().equalsIgnoreCase("mp4") ||
+                fichierAconvertir.getSupport().equalsIgnoreCase("avi")))
+            throw new ConversionImpossibleException("Format du fichier invalide (mp4 ou avi seulement).");
+        fichierConverti = fichierAconvertir.convertir(formatCible);
+        int index = videotheque.indexOf(fichierAconvertir);
+        videotheque.set(index, fichierConverti);
+        return fichierConverti;
     }
 }
