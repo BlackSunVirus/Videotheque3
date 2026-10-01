@@ -98,8 +98,8 @@ public class Controller {
     }
 
 
-    public void lectureVideo(GestionVideotheque videotheque) {
+    public void lectureVideo() {
         String titre = saisieString("Saisir le titre de la video à regarder : ");
-        Videotheque.lireVideo(titre);
+        v.lireVideo(titre);
     }
 }

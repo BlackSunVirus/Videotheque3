@@ -30,6 +30,7 @@ public class Main {
                         //TODO
                         break;
                     case 5:
+                        c.lectureVideo();
                         //TODO
                         break;
                     case 6:
