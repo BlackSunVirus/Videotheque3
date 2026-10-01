@@ -1,5 +1,9 @@
 package application;
+import exceptions.ConversionImpossibleException;
 import exceptions.SaisieInvalideException;
+import exceptions.VideoIntrouvableException;
+import exceptions.VideothequeVideException;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -72,5 +76,18 @@ public class Controller {
             }
         }
     }
+
+    public static void convertirVideo() {
+        try {
+            String titre = saisieString("Saisir le nom du fichier à convertir : ");
+            String format = saisieString("Saisir le format de conversion : ");
+            v.convertirVideo(titre, format);
+        } catch (VideoIntrouvableException | VideothequeVideException |
+                 ConversionImpossibleException | SaisieInvalideException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+
 
 }
