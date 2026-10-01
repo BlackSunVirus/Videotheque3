@@ -4,6 +4,7 @@ import exceptions.ConversionImpossibleException;
 import exceptions.LectureImpossibleException;
 import exceptions.SaisieInvalideException;
 import outils.Ffmpeg;
+import video.ConvertisseurVideo;
 
 import java.io.File;
 import java.io.IOException;
@@ -56,8 +57,8 @@ public abstract class FichierVideo extends Video implements Convertible {
 
         fichierSortie = new File(nomFichierSortie);
         System.out.println("Début de la conversion...");
-        Ffmpeg.convertir(fichierEntree, fichierSortie, fichierConverti.optionEncodage());
-        System.out.println("Conversion terminée !");
+        ConvertisseurVideo convertisseur = new ConvertisseurVideo(fichierEntree, fichierSortie, fichierConverti.optionEncodage());
+        convertisseur.demarrer();
         return fichierConverti;
     }
 
