@@ -50,7 +50,7 @@ public class Videotheque implements GestionVideotheque {
     @Override
     public void listerVideos() throws VideothequeVideException {
         // TODO
-        if(videotheque.isEmpty())
+        if (videotheque.isEmpty())
             throw new VideothequeVideException("La vidéothèque est vide");
         System.out.println(this);
     }
@@ -58,10 +58,10 @@ public class Videotheque implements GestionVideotheque {
     @Override
     public Video rechercherVideo(String titre) throws VideoIntrouvableException, VideothequeVideException {
         // TODO
-        if(videotheque.isEmpty())
+        if (videotheque.isEmpty())
             throw new VideothequeVideException("La vidéothèque est vide");
-        for(Video video : videotheque)
-            if(video.getTitre().equalsIgnoreCase(titre))
+        for (Video video : videotheque)
+            if (video.getTitre().equalsIgnoreCase(titre))
                 return video;
         throw new VideoIntrouvableException("La vidéo " + titre + " est introuvable.");
     }
@@ -75,26 +75,21 @@ public class Videotheque implements GestionVideotheque {
 
     @Override
     public void lireVideo(String titre) throws VideoIntrouvableException, VideothequeVideException, LectureImpossibleException {
-        // TODO
         Video videoaALire = rechercherVideo(titre);
-        if(!(videoaALire instanceof VideoAvi) | !(videoaALire instanceof VideoMp4)) {
-            throw new VideoIntrouvableException("!! Erreur : '" + videoaALire.getTitre() + "est un " + videoaALire.getSupport() + " : seuls les fichiers MP4 et AVI peuvent être lus.");
+        if (!(videoaALire instanceof VideoAvi) | !(videoaALire instanceof VideoMp4) | !(videoaALire instanceof Dvd)) {
+            throw new LectureImpossibleException("!! Erreur : '" + videoaALire.getTitre() + " n'est pas un fichier video.");
         }
-        if(lecteur!=null && lecteur.estEnCours()) {
-            arreterLecture();
+        videoaALire.lire();
+        if ((videoaALire instanceof VideoAvi) | (videoaALire instanceof VideoMp4)) {
+            System.out.println("Lecture de \"" + videoaALire.getTitre() + "\" lancée. Bonne écoute !");
         }
-        lecteur = new LecteurVideo((FichierVideo) videoaALire);
-        lecteur.demarrer();
-        System.out.println("Lecture de '" + videoaALire.getTitre() + "' lancée. Bonne écoute !");
-
     }
 
     public void arreterLecture() {
-        if (lecteur==null || !lecteur.estEnCours())
+        if (lecteur == null || !lecteur.estEnCours())
             throw new LectureImpossibleException("Il n'y a pas de lecture en cours.");
-        int tempsMs = lecteur.getPosition(); // TODO récuperer le temps de lecture
         lecteur.arreter(); // TODO arrete la lecture
-        System.out.println("Lecture arrêtée à " + (tempsMs / 1000) + " secondes");
+        System.out.println("Lecture arrêtée");
     }
 
     @Override
