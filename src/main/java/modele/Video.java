@@ -63,7 +63,7 @@ public abstract class Video implements Lisible {
     }
 
     @Override
-    public void lire() throws LectureImpossibleException {
+    public abstract void lire() throws LectureImpossibleException ;
 
-    }
+
 }

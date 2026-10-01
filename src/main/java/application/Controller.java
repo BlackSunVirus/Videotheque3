@@ -185,24 +185,8 @@ public class Controller {
         }
     }
 
-
     public void lectureVideo() {
         String titre = saisieString("Saisir le titre de la video à regarder : ");
-        Video v = videotheque.rechercherVideo(titre);
-        if(!(v instanceof VideoAvi avi | v instanceof VideoMp4 mp4))
-            throw new SaisieInvalideException("!! ERREUR : '" + v.getTitre() + "est un " + v.getSupport() + " : seul un fichier .mp4 ou .avi peut être lu");
-        if(lecteur!=null && lecteur.estEnCours())
-            arreterVideo();
-        lecteur = new LecteurVideo(v);
-        lecteur.demarrer();
-        System.out.println("Lecture de '" + v.getTitre() + "' lancée. Bonne écoute !");
-    }
-
-    public void arreterLecture() {
-        if (lecteur==null || !lecteur.estEnCours())
-            throw new SaisieInvalideException("Il n'y a pas de lecture en cours.");
-        int tempsMs = lecteur.getPosition(); // TODO récuperer le temps de lecture
-        lecteur.arreter(); // TODO arrete la lecture
-        System.out.println("Lecture arrêtée à " + (tempsMs / 1000) + " secondes");
+        v.lireVideo(titre);
     }
 }
