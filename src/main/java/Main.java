@@ -8,6 +8,7 @@ public class Main {
     public static void main(String[] args) {
 
         Controller c = new Controller();
+        c.peuplerVideotheque("mp4");
         int choix = -1;
 
         while (true) {
@@ -18,22 +19,25 @@ public class Main {
                 Controller.scan.nextLine();
                 switch (choix) {
                     case 1:
-                        //TODO
+                        c.ajouterVideo();
                         break;
                     case 2:
-                        //TODO
+                        c.listerVideos();
                         break;
                     case 3:
-                        //TODO
+                        c.rechercherVideo();
                         break;
                     case 4:
-                        //TODO
+                        c.supprimerVideo();
                         break;
                     case 5:
-                        //TODO
+                        c.lectureVideo();
                         break;
                     case 6:
-                        //TODO
+                        c.arreterLecture();
+                        break;
+                    case 7:
+                        c.convertirVideo();
                         break;
                     case 0:
                         System.out.println("Au revoir !");
