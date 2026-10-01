@@ -8,6 +8,7 @@ import modele.*;
 import video.LecteurVideo;
 
 import java.io.File;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -30,8 +31,7 @@ public class Controller {
         System.out.println("3. Rechercher une vidéo");
         System.out.println("4. Supprimer une vidéo");
         System.out.println("5. Lire une video");
-        System.out.println("6. Arrêter une video");
-        System.out.println("7. Convertir une vidéo");
+        System.out.println("6. Convertir une vidéo");
         System.out.println("0. Quitter");
         System.out.println("=====================================");
     }
@@ -194,13 +194,13 @@ public class Controller {
         }
     }
 
-    public static void convertirVideo() {
+    public void convertirVideo() {
         try {
             String titre = saisieString("Saisir le nom du fichier à convertir : ");
             String format = saisieString("Saisir le format de conversion : ");
             v.convertirVideo(titre, format);
-        } catch (VideoIntrouvableException | VideothequeVideException |
-                 ConversionImpossibleException | SaisieInvalideException e) {
+        } catch (VideoIntrouvableException | VideothequeVideException | ConversionImpossibleException |
+                 SaisieInvalideException | IOException | InterruptedException e) {
             System.out.println(e.getMessage());
         }
     }
