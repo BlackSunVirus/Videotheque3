@@ -16,8 +16,8 @@ public abstract class FichierVideo extends Video implements Convertible {
 
     private String chemin;
 
-    public FichierVideo(String titre, String realistaeur, LocalDate dateSortie, int duree) {
-        super(titre, realistaeur, dateSortie, duree);
+    public FichierVideo(String titre, String realisateur, LocalDate dateSortie, int duree) {
+        super(titre, realisateur, dateSortie, duree);
         String mediaDir = "media/";
         this.chemin = mediaDir + titre + "." + this.getSupport();
     }
@@ -31,8 +31,6 @@ public abstract class FichierVideo extends Video implements Convertible {
         return null;
     }
 
-
-
     @Override
     public FichierVideo convertir(String formatCible) throws ConversionImpossibleException, IOException, InterruptedException {
         File fichierEntree = getFichier();
@@ -44,11 +42,11 @@ public abstract class FichierVideo extends Video implements Convertible {
         switch (formatCible.toLowerCase()) {
             case "mp4":
                 nomFichierSortie += "mp4";
-                fichierConverti = new VideoMp4(getTitre(), getRealistaeur(), getDateSortie(), getDuree());
+                fichierConverti = new VideoMp4(getTitre(), getRealisateur(), getDateSortie(), getDuree());
                 break;
             case "avi":
                 nomFichierSortie += "avi";
-                fichierConverti = new VideoAvi(getTitre(), getRealistaeur(), getDateSortie(), getDuree());
+                fichierConverti = new VideoAvi(getTitre(), getRealisateur(), getDateSortie(), getDuree());
                 break;
             default:
                 throw new ConversionImpossibleException("Conversion impossible");

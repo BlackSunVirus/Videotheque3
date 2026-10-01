@@ -62,6 +62,7 @@ public class Videotheque implements GestionVideotheque {
     @Override
     public void lireVideo(String titre) throws VideoIntrouvableException, VideothequeVideException, LectureImpossibleException {
         // TODO
+        rechercherVideo(titre).lire();
     }
 
     @Override
