@@ -4,26 +4,30 @@ import exceptions.ConversionImpossibleException;
 import exceptions.LectureImpossibleException;
 import exceptions.SaisieInvalideException;
 import exceptions.VideoIntrouvableException;
+import outils.Ffmpeg;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.io.IOException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public abstract class FichierVideo extends Video implements Convertible {
 
     private String chemin;
 
-    public FichierVideo(String titre, String realistaeur, LocalDate dateSortie, int duree, String chemin) {
+    public FichierVideo(String titre, String realistaeur, LocalDate dateSortie, int duree) {
         super(titre, realistaeur, dateSortie, duree);
-        this.chemin = chemin;
+        String mediaDir = "media/";
+        this.chemin = mediaDir + titre + "." + this.getSupport();
     }
 
     // type File -> pas necessaire comme le chemin est dans les attributs (getFile)
     public File getFichier() {
-        // TODO
-        return null;
+        return new File(this.chemin);
     }
 
     //Récupère la taille du fichier en Mo
@@ -46,9 +50,31 @@ public abstract class FichierVideo extends Video implements Convertible {
 
 
     @Override
-    public FichierVideo convertir(String formatCible) throws ConversionImpossibleException, SaisieInvalideException {
-        // TODO
-        return null;
+    public FichierVideo convertir(String formatCible) throws ConversionImpossibleException, IOException, InterruptedException {
+        File fichierEntree = getFichier();
+        File fichierSortie;
+        String nomFichierEntree = getChemin();
+        String nomFichierSortie = nomFichierEntree.substring(0, nomFichierEntree.length() - 3);
+        FichierVideo fichierConverti;
+
+        switch (formatCible.toLowerCase()) {
+            case "mp4":
+                nomFichierSortie += "mp4";
+                fichierConverti = new VideoMp4(getTitre(), getrealisateur(), getDateSortie(), getDuree());
+                break;
+            case "avi":
+                nomFichierSortie += "avi";
+                fichierConverti = new VideoAvi(getTitre(), getrealisateur(), getDateSortie(), getDuree());
+                break;
+            default:
+                throw new ConversionImpossibleException("Conversion impossible");
+        }
+
+        fichierSortie = new File(nomFichierSortie);
+        System.out.println("Début de la conversion...");
+        Ffmpeg.convertir(fichierEntree, fichierSortie, fichierConverti.optionEncodage());
+        System.out.println("Conversion terminée !");
+        return fichierConverti;
     }
 
 

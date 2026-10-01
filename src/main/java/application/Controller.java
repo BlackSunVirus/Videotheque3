@@ -12,7 +12,6 @@ import java.util.Scanner;
 
 public class Controller {
     public static Scanner scan = new Scanner(System.in);
-    private static final List<String> formatAccepte = List.of("aac", "mp3", "flac", "wav");
     private static final List<String> formatFichierNumAccepte = List.of("AVI", "MP4");
 
     // Affiche le menu principal
