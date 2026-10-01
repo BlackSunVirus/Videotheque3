@@ -44,11 +44,11 @@ public abstract class FichierVideo extends Video implements Convertible {
         switch (formatCible.toLowerCase()) {
             case "mp4":
                 nomFichierSortie += "mp4";
-                fichierConverti = new VideoMp4(getTitre(), getRealistaeur(), getDateSortie(), getDuree());
+                fichierConverti = new VideoMp4(getTitre(), getrealisateur(), getDateSortie(), getDuree());
                 break;
             case "avi":
                 nomFichierSortie += "avi";
-                fichierConverti = new VideoAvi(getTitre(), getRealistaeur(), getDateSortie(), getDuree());
+                fichierConverti = new VideoAvi(getTitre(), getrealisateur(), getDateSortie(), getDuree());
                 break;
             default:
                 throw new ConversionImpossibleException("Conversion impossible");
@@ -56,7 +56,6 @@ public abstract class FichierVideo extends Video implements Convertible {
 
         fichierSortie = new File(nomFichierSortie);
         System.out.println("Début de la conversion...");
-        // TODO Lancer un thread
         Ffmpeg.convertir(fichierEntree, fichierSortie, fichierConverti.optionEncodage());
         System.out.println("Conversion terminée !");
         return fichierConverti;
