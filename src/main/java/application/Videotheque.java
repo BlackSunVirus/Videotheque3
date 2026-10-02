@@ -100,7 +100,7 @@ public class Videotheque implements GestionVideotheque {
     public void lireVideo(String titre) throws VideoIntrouvableException, VideothequeVideException, LectureImpossibleException {
         System.out.println("non");
         Video videoaALire = rechercherVideo(titre);
-        System.out.println("oui");
+
         if (!(videoaALire instanceof VideoAvi || videoaALire instanceof VideoMp4 || videoaALire instanceof Dvd)) {
             throw new LectureImpossibleException("!! Erreur : '" + videoaALire.getTitre() + " n'est pas un fichier video.");
         }

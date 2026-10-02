@@ -35,6 +35,13 @@ public class VideoMp4 extends FichierVideo {
     }
 
     @Override
+    protected List<String> optionsStreaming() {
+        List<String> options = new ArrayList<>();
+        options.add("-c");
+        options.add("copy");
+        return options;
+    }
+
     public String toString() {
         return super.toString() + "VideoMp4{}";
     }

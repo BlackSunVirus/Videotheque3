@@ -31,6 +31,34 @@ public class VideoAvi extends FichierVideo {
     }
 
     @Override
+    protected List<String> optionsStreaming() {
+        List<String> options = new ArrayList<>();
+        options.add("-c:v");
+        options.add("libx264");
+        options.add("-preset");
+        options.add("veryfast");
+        options.add("-tune");
+        options.add("zerolatency");
+        options.add("-pix_fmt");
+        options.add("yuv420p");
+        options.add("-g");
+        options.add("50");
+        options.add("-b:v");
+        options.add("2500k");
+        options.add("-maxrate");
+        options.add("2500k");
+        options.add("-bufsize");
+        options.add("5000k");
+        options.add("-c:a");
+        options.add("aac");
+        options.add("-b:a");
+        options.add("128k");
+        options.add("-ar");
+        options.add("44100");
+        options.add("-f");
+        return options;
+    }
+
     public String toString() {
         return super.toString() + "AVI";
     }
