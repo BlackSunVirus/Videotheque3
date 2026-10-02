@@ -36,6 +36,15 @@ public class Main {
                     case 6:
                         c.convertirVideo();
                         break;
+                    case 7 :
+                        c.demarrerStream();
+                        break;
+                    case 8 :
+                        //TODO diffuser wabcam
+                        break;
+                    case 9 :
+                        //TODO arrêter streaming
+                        break;
                     case 0:
                         System.out.println("Au revoir !");
                         Controller.scan.close();

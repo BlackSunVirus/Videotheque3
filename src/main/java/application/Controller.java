@@ -1,10 +1,8 @@
 package application;
 import at.favre.lib.crypto.bcrypt.BCrypt;
-import exceptions.ConversionImpossibleException;
-import exceptions.SaisieInvalideException;
-import exceptions.VideoIntrouvableException;
-import exceptions.VideothequeVideException;
+import exceptions.*;
 import modele.*;
+import outils.Streamer;
 import video.LecteurVideo;
 
 import java.io.File;
@@ -206,6 +204,35 @@ public class Controller {
     public void lectureVideo() {
         String titre = saisieString("Saisir le titre de la video à regarder : ");
         videotheque.lireVideo(titre);
+    }
+
+    public void demarrerStream() {
+        String titre = null;
+        boolean boucle = false;
+        String flux =null;
+        try {
+            titre = saisieString("Saisir le nom de la vidéo à diffuser : ");
+            String reponse = saisieString("Voulez-vous lire la vidéo en boucle ? (oui/non)");
+            if(reponse.equalsIgnoreCase("oui")) {
+                boucle = true;
+            }
+            flux = saisieString("Quel protocole de Stream souhaitez-vous ? (rtsp/rtmp)");
+            if(flux.equalsIgnoreCase("rtsp")) {
+                flux = "rtsp";
+            }else if (flux.equalsIgnoreCase("rtmp")) {
+                flux = "rtmp";
+            }
+
+        } catch (SaisieInvalideException | VideoIntrouvableException | VideothequeVideException | StreamingException  e) {
+            System.out.println(e.getMessage());
+        }
+        // FichierVideo video, String nomFlux, boolean boucle
+        // rtsp ou rtmp // if "rtsp rtsp://172.16.120.28:554/live" | "flv rtmp://172.16.120.28:1935/live"
+        Video video = videotheque.rechercherVideo(titre);
+        Streamer.diffuserFichier(video, flux, boucle);
+
+        }
+
     }
 
 //    public static String hashPassword(String password) {
