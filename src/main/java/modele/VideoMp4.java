@@ -27,7 +27,7 @@ public class VideoMp4 extends FichierVideo {
         options.add("-crf");
         options.add("23");
         options.add("-c:a");
-        options.add("acc");
+        options.add("aac");
         options.add("-b:a");
         options.add("160k");
 
@@ -42,4 +42,7 @@ public class VideoMp4 extends FichierVideo {
         return options;
     }
 
+    public String toString() {
+        return super.toString() + "VideoMp4{}";
+    }
 }

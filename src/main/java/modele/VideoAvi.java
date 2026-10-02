@@ -59,4 +59,7 @@ public class VideoAvi extends FichierVideo {
         return options;
     }
 
+    public String toString() {
+        return super.toString() + "AVI";
+    }
 }
