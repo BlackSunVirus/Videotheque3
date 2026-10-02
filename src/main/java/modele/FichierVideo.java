@@ -78,7 +78,6 @@ public abstract class FichierVideo extends Video implements Convertible {
         return fichierConverti;
     }
 
-
     //Lance ffplay (outils) dans un thread daemon (package video -> LecteurVideo)
     @Override
     public void lire() {
@@ -100,10 +99,14 @@ public abstract class FichierVideo extends Video implements Convertible {
     }
 
     @Override
-    public String toString() {
-        return "FichierVideo{" +
-                "chemin='" + chemin + '\'' +
-                '}';
+    public String getSupport() {
+        return "Fichier Vidéo";
     }
 
+    @Override
+    public String toString() {
+        return super.toString() + getSupport() +
+                " : chemin='" + chemin + '\'' +
+                '}';
+    }
 }

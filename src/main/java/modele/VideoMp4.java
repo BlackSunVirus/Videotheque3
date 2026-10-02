@@ -36,6 +36,6 @@ public class VideoMp4 extends FichierVideo {
 
     @Override
     public String toString() {
-        return super.toString() + "VideoMp4{}";
+        return super.toString() + getSupport();
     }
 }

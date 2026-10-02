@@ -32,6 +32,6 @@ public class VideoAvi extends FichierVideo {
 
     @Override
     public String toString() {
-        return super.toString() + "AVI";
+        return super.toString() + getSupport();
     }
 }
