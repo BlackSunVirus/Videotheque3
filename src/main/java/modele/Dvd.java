@@ -18,12 +18,20 @@ public class Dvd extends Video {
 
     @Override
     public String getSupport() {
-        // TODO
-        return "";
+        return "DVD";
     }
 
     @Override
     public void lire() throws LectureImpossibleException {
         // TODO
+        System.out.println("Prenez le DVD " + this.numero + " \"" + super.getTitre() + "\" et insérez-le dans un lecteur zone " + this.zone + ".");
+    }
+
+    @Override
+    public String toString() {
+        return super.toString() + getSupport() + " : {" +
+                "numero='" + numero + '\'' +
+                ", zone=" + zone +
+                '}';
     }
 }
