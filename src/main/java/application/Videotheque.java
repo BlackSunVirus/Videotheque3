@@ -134,4 +134,12 @@ public class Videotheque implements GestionVideotheque {
         videotheque.set(index, fichierConverti);
         return fichierConverti;
     }
+
+    @Override
+    public String toString() {
+        return "Videotheque{" +
+                "videotheque=" + videotheque +
+                ", lecteur=" + lecteur +
+                '}';
+    }
 }
