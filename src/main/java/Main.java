@@ -40,10 +40,10 @@ public class Main {
                         c.demarrerStream();
                         break;
                     case 8 :
-                        //TODO diffuser wabcam
+                        c.diffuserCameraController();
                         break;
                     case 9 :
-                        //TODO arrêter streaming
+                        c.arretStreaming();
                         break;
                     case 0:
                         System.out.println("Au revoir !");

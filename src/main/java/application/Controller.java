@@ -13,6 +13,7 @@ import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.Locale;
 import java.util.Scanner;
+import java.util.stream.Stream;
 
 public class Controller {
     public static Scanner scan = new Scanner(System.in);
@@ -29,6 +30,9 @@ public class Controller {
         System.out.println("4. Supprimer une vidéo");
         System.out.println("5. Lire une video");
         System.out.println("6. Convertir une vidéo");
+        System.out.println("7. Démarrer le streaming d'une vidéo");
+        System.out.println("8. Diffuser la webcam en streaming");
+        System.out.println("9. Arrêter le streaming");
         System.out.println("0. Quitter");
         System.out.println("=====================================");
     }
@@ -232,8 +236,37 @@ public class Controller {
         Streamer.diffuserFichier(video, flux, boucle);
 
         }
+    public void diffuserCameraController() {
+
+
+        //public void diffuserCamera(String nomFlux)
+    }
+
+    public void arretStreaming() {
+        boolean arret = false;
+
+        try {
+            String choix = saisieString("Voulez-vous vraiment arrêter le streaming ? (O/N)");
+            if (choix.equalsIgnoreCase("O")) {
+               arret = true;
+                System.out.println("Arrêt en cours");
+            }
+        } catch (SaisieInvalideException e) {
+            System.out.println("Saisie invalide : " + e.getMessage());
+        }
+        if(arret == true) {
+            try {
+                Streamer.arreter();
+            } catch (StreamingException e) {
+                System.out.println(e.getMessage());
+            }
+
+
+        }
 
     }
+
+
 
 //    public static String hashPassword(String password) {
 //        // Définir
