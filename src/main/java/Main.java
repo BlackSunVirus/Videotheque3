@@ -51,6 +51,15 @@ public class Main {
                     case 6:
                         c.convertirVideo();
                         break;
+                    case 7 :
+                        c.demarrerStream();
+                        break;
+                    case 8 :
+                        c.diffuserCameraController();
+                        break;
+                    case 9 :
+                        c.arretStreaming();
+                        break;
                     case 0:
                         System.out.println("Au revoir !");
                         Controller.scan.close();

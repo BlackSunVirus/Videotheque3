@@ -1,10 +1,8 @@
 package application;
 import at.favre.lib.crypto.bcrypt.BCrypt;
-import exceptions.ConversionImpossibleException;
-import exceptions.SaisieInvalideException;
-import exceptions.VideoIntrouvableException;
-import exceptions.VideothequeVideException;
+import exceptions.*;
 import modele.*;
+import outils.Streamer;
 import video.LecteurVideo;
 
 import java.io.File;
@@ -15,6 +13,7 @@ import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.Locale;
 import java.util.Scanner;
+import java.util.stream.Stream;
 
 public class Controller {
     public static Scanner scan = new Scanner(System.in);
@@ -31,6 +30,9 @@ public class Controller {
         System.out.println("4. Supprimer une vidéo");
         System.out.println("5. Lire une video");
         System.out.println("6. Convertir une vidéo");
+        System.out.println("7. Démarrer le streaming d'une vidéo");
+        System.out.println("8. Diffuser la webcam en streaming");
+        System.out.println("9. Arrêter le streaming");
         System.out.println("0. Quitter");
         System.out.println("=====================================");
     }
@@ -207,6 +209,64 @@ public class Controller {
         String titre = saisieString("Saisir le titre de la video à regarder : ");
         videotheque.lireVideo(titre);
     }
+
+    public void demarrerStream() {
+        String titre = null;
+        boolean boucle = false;
+        String flux =null;
+        try {
+            titre = saisieString("Saisir le nom de la vidéo à diffuser : ");
+            String reponse = saisieString("Voulez-vous lire la vidéo en boucle ? (oui/non)");
+            if(reponse.equalsIgnoreCase("oui")) {
+                boucle = true;
+            }
+            flux = saisieString("Quel protocole de Stream souhaitez-vous ? (rtsp/rtmp)");
+            if(flux.equalsIgnoreCase("rtsp")) {
+                flux = "rtsp";
+            }else if (flux.equalsIgnoreCase("rtmp")) {
+                flux = "rtmp";
+            }
+
+        } catch (SaisieInvalideException | VideoIntrouvableException | VideothequeVideException | StreamingException  e) {
+            System.out.println(e.getMessage());
+        }
+        // FichierVideo video, String nomFlux, boolean boucle
+        // rtsp ou rtmp // if "rtsp rtsp://172.16.120.28:554/live" | "flv rtmp://172.16.120.28:1935/live"
+        Video video = videotheque.rechercherVideo(titre);
+        Streamer.diffuserFichier(video, flux, boucle);
+
+        }
+    public void diffuserCameraController() {
+
+
+        //public void diffuserCamera(String nomFlux)
+    }
+
+    public void arretStreaming() {
+        boolean arret = false;
+
+        try {
+            String choix = saisieString("Voulez-vous vraiment arrêter le streaming ? (O/N)");
+            if (choix.equalsIgnoreCase("O")) {
+               arret = true;
+                System.out.println("Arrêt en cours");
+            }
+        } catch (SaisieInvalideException e) {
+            System.out.println("Saisie invalide : " + e.getMessage());
+        }
+        if(arret == true) {
+            try {
+                Streamer.arreter();
+            } catch (StreamingException e) {
+                System.out.println(e.getMessage());
+            }
+
+
+        }
+
+    }
+
+
 
 //    public static String hashPassword(String password) {
 //        // Définir
