@@ -2,13 +2,28 @@
 import application.Controller;
 import application.Videotheque;
 import exceptions.*;
+import modele.FichierVideo;
+import modele.Video;
+import modele.VideoMp4;
+import outils.Streamer;
+
+import java.time.LocalDate;
 import java.util.InputMismatchException;
+import java.util.stream.Stream;
 
 public class Main {
     public static void main(String[] args) {
 
+
         Controller c = new Controller();
         c.peuplerVideotheque("mp4");
+
+//        Streamer s = new Streamer("rtsp://127.0.0.1:8554/");
+//        FichierVideo v  = new VideoMp4("planet", "auteur", LocalDate.now(), 1);
+//
+//        s.diffuserFichier(v, "film", false);
+
+
         int choix = -1;
 
         while (true) {

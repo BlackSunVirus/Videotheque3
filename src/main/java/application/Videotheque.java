@@ -8,6 +8,7 @@ import video.LecteurVideo;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Videotheque implements GestionVideotheque {
 
@@ -135,11 +136,4 @@ public class Videotheque implements GestionVideotheque {
         return fichierConverti;
     }
 
-    @Override
-    public String toString() {
-        return "Videotheque{" +
-                "videotheque=" + videotheque +
-                ", lecteur=" + lecteur +
-                '}';
-    }
 }
