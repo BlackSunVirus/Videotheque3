@@ -24,7 +24,7 @@ public abstract class FichierVideo extends Video implements Convertible {
     public FichierVideo(String titre, String realisateur, LocalDate dateSortie, int duree) {
         super(titre, realisateur, dateSortie, duree);
         String mediaDir = "media/";
-        this.chemin = mediaDir + titre + "." + this.getSupport();
+        this.chemin = mediaDir + titre + "." + this.getSupport().toLowerCase();
     }
 
     // type File -> pas necessaire comme le chemin est dans les attributs (getFile)
@@ -90,8 +90,7 @@ public abstract class FichierVideo extends Video implements Convertible {
 
     protected abstract List<String> optionEncodage();
 
-    protected abstract List<String> optionsStreaming();
-
+    public abstract List<String> getOptionsStreaming();
 
     public String getChemin() {
         return chemin;

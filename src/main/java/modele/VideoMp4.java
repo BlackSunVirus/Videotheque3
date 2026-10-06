@@ -5,8 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class VideoMp4 extends FichierVideo {
-
-
     public VideoMp4(String titre, String realisateur, LocalDate dateSortie, int duree) {
         super(titre, realisateur, dateSortie, duree);
     }
@@ -34,11 +32,16 @@ public class VideoMp4 extends FichierVideo {
         return options;
     }
 
-    @Override
-    protected List<String> optionsStreaming() {
+    public List<String> getOptionsStreaming() {
         List<String> options = new ArrayList<>();
-        options.add("-c");
-        options.add("copy");
+        //options.add("-c");
+        //options.add("copy"); // Le MP4 est déjà compatible (H.264/AAC), on copie directement sans consommer de CPU
+        options.add("-c:v");
+        options.add("libx264");
+        options.add("-preset");
+        options.add("ultrafast");
+        options.add("-c:a");
+        options.add("aac");
         return options;
     }
 

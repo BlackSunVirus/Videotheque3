@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class VideoAvi extends FichierVideo {
-
     public VideoAvi(String titre, String realisateur, LocalDate dateSortie, int duree) {
         super(titre, realisateur, dateSortie, duree);
     }
@@ -31,7 +30,7 @@ public class VideoAvi extends FichierVideo {
     }
 
     @Override
-    protected List<String> optionsStreaming() {
+    public List<String> getOptionsStreaming() {
         List<String> options = new ArrayList<>();
         options.add("-c:v");
         options.add("libx264");
