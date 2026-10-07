@@ -58,6 +58,6 @@ public class VideoAvi extends FichierVideo {
     }
 
     public String toString() {
-        return super.toString() + getSupport();
+        return super.toString();
     }
 }
