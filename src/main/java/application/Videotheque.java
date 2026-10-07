@@ -70,12 +70,14 @@ public class Videotheque implements GestionVideotheque {
     }
 
     @Override
-    public void listerVideos() throws VideothequeVideException {
+    public List<Video> listerVideos() throws VideothequeVideException {
         // TODO
+        List<Video> lVideos = new ArrayList<>();
         if (videotheque.isEmpty())
             throw new VideothequeVideException("La vidéothèque est vide");
         for (Video v : videotheque)
-            System.out.println(v);
+            lVideos.add(v);
+        return lVideos;
     }
 
     @Override
@@ -134,6 +136,10 @@ public class Videotheque implements GestionVideotheque {
         int index = videotheque.indexOf(fichierAconvertir);
         videotheque.set(index, fichierConverti);
         return fichierConverti;
+    }
+
+    public void clear() {
+        this.videotheque.clear();
     }
 
 }

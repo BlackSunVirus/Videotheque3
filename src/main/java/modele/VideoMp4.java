@@ -6,6 +6,10 @@ import java.util.List;
 import java.util.Locale;
 
 public class VideoMp4 extends FichierVideo {
+
+    public VideoMp4() {
+    }
+
     public VideoMp4(String titre, String realisateur, LocalDate dateSortie, int duree) {
         super(titre, realisateur, dateSortie, duree);
     }

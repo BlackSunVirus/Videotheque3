@@ -21,6 +21,9 @@ public abstract class FichierVideo extends Video implements Convertible {
 
     private String chemin;
 
+    public FichierVideo() {
+    }
+
     public FichierVideo(String titre, String realisateur, LocalDate dateSortie, int duree) {
         super(titre, realisateur, dateSortie, duree);
         String mediaDir = "media/";

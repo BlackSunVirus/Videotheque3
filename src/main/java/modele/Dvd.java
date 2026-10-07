@@ -9,6 +9,13 @@ public class Dvd extends Video {
     private String numero;
     private int zone;
 
+    public Dvd() {
+    }
+
+    public Dvd(String titre, String realisateur, LocalDate dateSortie, int duree) {
+        super(titre, realisateur, dateSortie, duree);
+    }
+
     public Dvd(String titre, String realistaeur, LocalDate dateSortie, int duree, String numero, int zone) {
         super(titre, realistaeur, dateSortie, duree);
         this.numero = numero;

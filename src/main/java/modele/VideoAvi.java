@@ -5,6 +5,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class VideoAvi extends FichierVideo {
+
+    public VideoAvi() {
+    }
+
     public VideoAvi(String titre, String realisateur, LocalDate dateSortie, int duree) {
         super(titre, realisateur, dateSortie, duree);
     }
