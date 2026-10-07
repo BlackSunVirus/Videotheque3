@@ -47,6 +47,7 @@ public class Controller {
         if(extension.equalsIgnoreCase("mp4")) {
             for(File f : fichiers) {
                 if(f.getName().endsWith(pointExtension)) {
+
                     FichierVideo fv = new VideoMp4(f.getName().replace(pointExtension, ""), f.getName().replace(pointExtension, "Auteur"),
                             LocalDate.now(), 0) {
                     };

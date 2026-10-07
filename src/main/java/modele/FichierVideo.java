@@ -107,8 +107,6 @@ public abstract class FichierVideo extends Video implements Convertible {
 
     @Override
     public String toString() {
-        return super.toString() + getSupport() +
-                " : chemin='" + chemin + '\'' +
-                '}';
+        return super.toString() + " --> " + chemin;
     }
 }

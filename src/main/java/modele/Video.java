@@ -3,6 +3,7 @@ package modele;
 import exceptions.LectureImpossibleException;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 public abstract class Video implements Lisible {
 
@@ -54,12 +55,11 @@ public abstract class Video implements Lisible {
 
     @Override
     public String toString() {
-        return "Video{" +
-                "titre='" + titre + '\'' +
-                ", realisateur='" + realisateur + '\'' +
-                ", dateSortie=" + dateSortie +
-                ", duree=" + duree +
-                '}';
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        String sDate = LocalDate.now().format(formatter);
+        return "Vidéo : " + titre +
+                " (" + duree + "mins) réalisée par " +
+                realisateur + " le " + sDate;
     }
 
     @Override

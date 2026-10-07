@@ -3,6 +3,7 @@ package modele;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class VideoMp4 extends FichierVideo {
     public VideoMp4(String titre, String realisateur, LocalDate dateSortie, int duree) {
@@ -46,6 +47,6 @@ public class VideoMp4 extends FichierVideo {
     }
 
     public String toString() {
-        return super.toString() + getSupport();
+        return super.toString();
     }
 }

@@ -176,15 +176,25 @@ public class Streamer implements Runnable {
     }
 
     public boolean estEnCours() { return processus != null && processus.isAlive(); }
+
     /** URL à donner aux spectateurs, ex. rtsp://.../film */
     public String getUrlLecture() { /* TODO */
         if(fluxEnCours == null)
             return "Aucun flux actif";
-        String url = urlServeur;
-        if (!url.endsWith("/")) {
-            url += "/";
+        try {
+            System.out.println("Diffusion lancée.");
+            String urlFlux = urlServeur + fluxEnCours;
+            URI uri = new URI(urlFlux);
+            URI nouvelleUri = new URI("http", uri.getUserInfo(),
+                    uri.getHost(), 8888, uri.getPath(),
+                    uri.getQuery(), uri.getFragment());
+
+            String urlsLecture = "VLC / ffplay : " + urlFlux + "\nWeb : " + nouvelleUri.toString();
+            return urlsLecture;
+        } catch (URISyntaxException e) {
+            System.err.println(e.getMessage());
         }
-        return url + fluxEnCours;
+        return null;
     }
 
     /** -f rtsp -rtsp_transport tcp rtsp://serveur:8554/nomFlux */
@@ -249,7 +259,7 @@ public class Streamer implements Runnable {
                 throw new StreamingException("Erreur du stream : processus arrêté avec code : " + codeErreur);
             }
 
-            afficherUrls();
+            System.out.println(getUrlLecture());
         } catch (IOException | InterruptedException e) {
             this.processus = null;
             this.fluxEnCours = null;
@@ -272,18 +282,4 @@ public class Streamer implements Runnable {
         }
     }
 
-    public void afficherUrls() {
-        try {
-            System.out.println("Diffusion lancée.");
-            String urlFlux = urlServeur + fluxEnCours;
-            URI uri = new URI(urlFlux);
-            URI nouvelleUri = new URI("http", uri.getUserInfo(),
-                    uri.getHost(), 8888, uri.getPath(),
-                    uri.getQuery(), uri.getFragment());
-            System.out.println("VLC / ffplay : " + urlServeur);
-            System.out.println("Web : " + nouvelleUri.toString());
-        } catch (URISyntaxException e) {
-            System.err.println(e.getMessage());
-        }
-    }
 }

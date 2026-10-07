@@ -58,7 +58,7 @@ public class Videotheque implements GestionVideotheque {
 
         // Vérification des doublons
         for (Video video : videotheque) {
-            if (video.getTitre().equalsIgnoreCase(v.getTitre())) {
+            if (video.getTitre().equalsIgnoreCase(v.getTitre()) && video.getSupport().equalsIgnoreCase(v.getSupport())) {
                 throw new VideoDejaExistanteException(
                         "La vidéo " + v.getTitre() + " existe déjà."
                 );
@@ -69,13 +69,13 @@ public class Videotheque implements GestionVideotheque {
         videotheque.add(v);
     }
 
-
     @Override
     public void listerVideos() throws VideothequeVideException {
         // TODO
         if (videotheque.isEmpty())
             throw new VideothequeVideException("La vidéothèque est vide");
-        System.out.println(videotheque);
+        for (Video v : videotheque)
+            System.out.println(v);
     }
 
     @Override
