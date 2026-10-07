@@ -68,7 +68,4 @@ public class LecteurVideo implements Runnable {
         //System.out.println("En cours --> " + Thread.currentThread().getName());
         return thread != null && thread.isAlive();
     }
-
-
-
 }

@@ -230,10 +230,11 @@ public class Controller {
         } catch (SaisieInvalideException | VideoIntrouvableException | VideothequeVideException | StreamingException  e) {
             System.out.println(e.getMessage());
         }
+        //TODO
         // FichierVideo video, String nomFlux, boolean boucle
         // rtsp ou rtmp // if "rtsp rtsp://172.16.120.28:554/live" | "flv rtmp://172.16.120.28:1935/live"
-        Video video = videotheque.rechercherVideo(titre);
-        Streamer.diffuserFichier(video, flux, boucle);
+        //Video video = videotheque.rechercherVideo(titre);
+        //Streamer.diffuserFichier(video, flux, boucle);
 
         }
     public void diffuserCameraController() {
@@ -254,15 +255,14 @@ public class Controller {
         } catch (SaisieInvalideException e) {
             System.out.println("Saisie invalide : " + e.getMessage());
         }
-        if(arret == true) {
-            try {
-                Streamer.arreter();
-            } catch (StreamingException e) {
-                System.out.println(e.getMessage());
-            }
-
-
-        }
+        //TODO
+//        if(arret == true) {
+//            try {
+//                Streamer.arreter();
+//            } catch (StreamingException e) {
+//                System.out.println(e.getMessage());
+//            }
+//        }
 
     }
 
