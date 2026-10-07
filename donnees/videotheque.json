@@ -1,0 +1,37 @@
+[ {
+  "type" : "mp4",
+  "chemin" : "media/fileExample.mp4",
+  "dateSortie" : "2026-10-07",
+  "duree" : 0,
+  "realisateur" : "fileExampleAuteur",
+  "titre" : "fileExample"
+}, {
+  "type" : "mp4",
+  "chemin" : "media/planet.mp4",
+  "dateSortie" : "2026-10-07",
+  "duree" : 0,
+  "realisateur" : "planetAuteur",
+  "titre" : "planet"
+}, {
+  "type" : "avi",
+  "chemin" : "media/fileExample.avi",
+  "dateSortie" : "2026-10-07",
+  "duree" : 0,
+  "realisateur" : "fileExampleAuteur",
+  "titre" : "fileExample"
+}, {
+  "type" : "avi",
+  "chemin" : "media/planet.avi",
+  "dateSortie" : "2026-10-07",
+  "duree" : 0,
+  "realisateur" : "planetAuteur",
+  "titre" : "planet"
+}, {
+  "type" : "dvd",
+  "dateSortie" : "2000-11-11",
+  "duree" : 1,
+  "numero" : "1",
+  "realisateur" : "d",
+  "titre" : "d",
+  "zone" : 1
+} ]

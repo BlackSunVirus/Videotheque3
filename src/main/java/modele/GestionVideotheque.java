@@ -3,11 +3,12 @@ package modele;
 import exceptions.*;
 
 import java.io.IOException;
+import java.util.List;
 
 public interface GestionVideotheque {
     void ajouterVideo(Video v)
             throws VideoDejaExistanteException, SaisieInvalideException;
-    void listerVideos() throws VideothequeVideException;
+    List<Video> listerVideos() throws VideothequeVideException;
     Video rechercherVideo(String titre)
             throws VideoIntrouvableException, VideothequeVideException;
     void supprimerVideo(String titre)

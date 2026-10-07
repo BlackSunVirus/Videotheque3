@@ -2,12 +2,10 @@
 import application.Controller;
 import application.Videotheque;
 import exceptions.*;
-import modele.FichierVideo;
-import modele.Video;
-import modele.VideoAvi;
-import modele.VideoMp4;
+import modele.*;
 import outils.Streamer;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.InputMismatchException;
 import java.util.stream.Stream;
@@ -16,8 +14,25 @@ public class Main {
     public static void main(String[] args) {
 
         Controller c = new Controller();
-        c.peuplerVideotheque("mp4");
-        c.peuplerVideotheque("avi");
+        StockageJson stockage = new StockageJson("donnees/videotheque.json");
+
+        try {
+            if(!c.charger(stockage)) {
+                System.out.println("Aucune sauvegarde trouvée. Ajout des vidéos dans la vidéothèque");
+                c.peuplerVideotheque("mp4");
+                c.peuplerVideotheque("avi");
+            }
+
+        } catch (IOException | IllegalArgumentException e) {
+            System.err.println("impossible de charger le fichier de sauvegarde" + e.getMessage());
+        }
+
+        System.out.println("Etat de la vidéothèque : ");
+        try {
+            c.listerVideos();
+        } catch (VideothequeVideException e) {
+            System.out.println("Erreur lors de la récupération des fichiers");
+        }
 
         /** Pour tester la classe Streamer **/
         //Streamer s = new Streamer("rtsp://127.0.0.1:8554/");
@@ -30,7 +45,7 @@ public class Main {
         while (true) {
             try {
                 c.afficherMenu();
-                System.out.print("Choix :");
+                System.out.print("Choix : ");
                 choix = Controller.scan.nextInt();
                 Controller.scan.nextLine();
                 switch (choix) {
@@ -62,6 +77,12 @@ public class Main {
                         c.arretStreaming();
                         break;
                     case 0:
+                        try {
+                            c.sauvegarder(stockage);
+                            System.out.println("Sauvegarde effectuée avec succès !");
+                        } catch (IOException e) {
+                            System.err.println("Erreur lors de l'enregistrement " + e);
+                        }
                         System.out.println("Au revoir !");
                         Controller.scan.close();
                         System.exit(0);

@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Scanner;
@@ -41,35 +42,46 @@ public class Controller {
         String pointExtension = "." + extension;
         File dossier = new File("media/");
         File[] fichiers = dossier.listFiles();
-        if (fichiers==null) {
+
+        if (fichiers == null) {
             return;
         }
-        if(extension.equalsIgnoreCase("mp4")) {
-            for(File f : fichiers) {
-                if(f.getName().endsWith(pointExtension)) {
 
-                    FichierVideo fv = new VideoMp4(f.getName().replace(pointExtension, ""), f.getName().replace(pointExtension, "Auteur"),
-                            LocalDate.now(), 0) {
-                    };
+        if (extension.equalsIgnoreCase("mp4")) {
+            for (File f : fichiers) {
+                if (f.getName().endsWith(pointExtension)) {
+
+                    FichierVideo fv = new VideoMp4(
+                            f.getName().replace(pointExtension, ""),
+                            f.getName().replace(pointExtension, "Auteur"),
+                            LocalDate.now(),
+                            0
+                    );
+
                     videotheque.ajouterVideo(fv);
                 }
             }
             return;
         }
 
-        if(extension.equalsIgnoreCase("avi")) {
-            for(File f : fichiers) {
-                if(f.getName().endsWith(pointExtension)) {
-                    FichierVideo fv = new VideoAvi(f.getName().replace(pointExtension, ""), f.getName().replace(pointExtension, "Auteur"),
-                            LocalDate.now(), 0) {
-                    };
+        if (extension.equalsIgnoreCase("avi")) {
+            for (File f : fichiers) {
+                if (f.getName().endsWith(pointExtension)) {
+
+                    FichierVideo fv = new VideoAvi(
+                            f.getName().replace(pointExtension, ""),
+                            f.getName().replace(pointExtension, "Auteur"),
+                            LocalDate.now(),
+                            0
+                    );
+
                     videotheque.ajouterVideo(fv);
                 }
             }
             return;
         }
+
         System.out.println("Problème d'extension de fichier (AVI/MP4)");
-        return;
     }
 
     public void ajouterVideo() {
@@ -131,7 +143,7 @@ public class Controller {
     }
 
     public void listerVideos() {
-        videotheque.listerVideos();
+        System.out.println(videotheque.listerVideos());
     }
 
     public void rechercherVideo() {
@@ -265,6 +277,32 @@ public class Controller {
 //            }
 //        }
 
+    }
+
+    public void sauvegarder(Stockage s) throws IOException {
+        try {
+            s.sauvegarder(videotheque.listerVideos());
+        } catch (IOException e) {
+            System.err.println(e.getMessage());;
+        }
+    }
+
+    public boolean charger(Stockage s) throws IOException, IllegalArgumentException {
+
+        try {
+            List<Video> videosACharger = s.charger();
+            if(videosACharger == null || videosACharger.isEmpty()) {
+                return false;
+            }
+            videotheque.clear();
+            for (Video v : videosACharger) {
+                videotheque.ajouterVideo(v);
+            }
+            return true;
+        } catch (IOException e) {
+            System.err.println(e.getMessage());
+            return false;
+        }
     }
 
 
