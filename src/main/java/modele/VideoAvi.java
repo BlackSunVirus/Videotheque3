@@ -54,7 +54,6 @@ public class VideoAvi extends FichierVideo {
         options.add("128k");
         options.add("-ar");
         options.add("44100");
-        options.add("-f");
         return options;
     }
 

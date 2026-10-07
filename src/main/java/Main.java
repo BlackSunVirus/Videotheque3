@@ -4,6 +4,7 @@ import application.Videotheque;
 import exceptions.*;
 import modele.FichierVideo;
 import modele.Video;
+import modele.VideoAvi;
 import modele.VideoMp4;
 import outils.Streamer;
 
@@ -18,11 +19,12 @@ public class Main {
         Controller c = new Controller();
         c.peuplerVideotheque("mp4");
 
-//        Streamer s = new Streamer("rtsp://127.0.0.1:8554/");
-//        FichierVideo v  = new VideoMp4("planet", "auteur", LocalDate.now(), 1);
-//
-//        s.diffuserFichier(v, "film", false);
-
+        /** Pour tester la classe Streamer **/
+        //c.peuplerVideotheque("avi");
+        //Streamer s = new Streamer("rtsp://127.0.0.1:8554/");
+        //FichierVideo v  = new VideoMp4("planet", "auteur", LocalDate.now(), 1);
+        //FichierVideo v  = new VideoAvi("planet", "auteur", LocalDate.now(), 1);
+        //s.diffuserFichier(v, "film", false);
 
         int choix = -1;
 
@@ -77,6 +79,4 @@ public class Main {
             }
         }
     }
-
-
 }
