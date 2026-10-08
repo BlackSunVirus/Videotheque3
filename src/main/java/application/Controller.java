@@ -248,15 +248,10 @@ public class Controller {
             titre = saisieString("Saisir le nom de la vidéo à diffuser : ");
             extension = saisieString("Saisir l'extension de la vidéo à diffuser :");
             String reponse = saisieString("Voulez-vous lire la vidéo en boucle ? (oui/non)");
-            if(reponse.equalsIgnoreCase("oui")) {
+            if(reponse.equalsIgnoreCase("oui") || reponse.equalsIgnoreCase("o")) {
                 boucle = true;
             }
             flux = saisieString("Quel répertoire de Stream souhaitez-vous ? --> monsite.com/live");
-//            if(flux.equalsIgnoreCase("rtsp")) {
-//                flux = "rtsp";
-//            }else if (flux.equalsIgnoreCase("rtmp")) {
-//                flux = "rtmp";
-//            }
 
         } catch (SaisieInvalideException | VideoIntrouvableException | VideothequeVideException | StreamingException  e) {
             System.out.println(e.getMessage());
@@ -270,9 +265,12 @@ public class Controller {
         }
         if(!(video instanceof FichierVideo))
             throw new SaisieInvalideException("Veuillez saisir un fichier vidéo");
-        if(streamer!=null && streamer.estEnCours())
+        if(streamer == null) {
+            streamer = new Streamer(urlServeur);
+
+        } else if(streamer.estEnCours()) {
             streamer.arreter();
-        streamer = new Streamer(urlServeur);
+        }
         streamer.diffuserFichier((FichierVideo)video, flux, boucle);
         System.out.println("Streaming de " + video.getTitre() + " lancée. Bon visionage");
 
@@ -284,17 +282,19 @@ public class Controller {
         boolean son = false;
         try {
             flux = saisieString("Quel répertoire de Stream souhaitez-vous ? --> monsite.com/live");
-            reponse = saisieString("Voulez-vous lire la vidéo en boucle ? (oui/non)");
-            if(reponse.equalsIgnoreCase("oui")) {
+            reponse = saisieString("Voulez-vous diffuser le son ? (oui/non)");
+            if(reponse.equalsIgnoreCase("oui") || reponse.equalsIgnoreCase("o")) {
                 son = true;
             }
         } catch (SaisieInvalideException e) {
             throw new SaisieInvalideException(e.getMessage());
         }
+        if(streamer==null) {
+            streamer = new Streamer(urlServeur);
 
-        if(streamer!=null && streamer.estEnCours())
+        } else if(streamer.estEnCours()) {
             streamer.arreter();
-        streamer = new Streamer(urlServeur);
+        }
         streamer.diffuserCamera(flux, son);
         System.out.println("Streaming de la caméra lancée. Bonne diffusion");
 
@@ -302,26 +302,28 @@ public class Controller {
 
     public void arretStreaming() {
         boolean arret = false;
-        if(streamer != null || !streamer.estEnCours())
-            throw new StreamingException("Aucun stream en cours");
         try {
+            if(streamer == null || !streamer.estEnCours())
+                throw new StreamingException("Aucun stream en cours");
             String choix = saisieString("Voulez-vous vraiment arrêter le streaming ? (O/N)");
-            if (choix.equalsIgnoreCase("O")) {
-               streamer.arreter();
-               System.out.println("Arrêt en cours");
+            if (choix.equalsIgnoreCase("O") || choix.equalsIgnoreCase("oui")) {
+                streamer.arreter();
+                System.out.println("Arrêt en cours");
             }
-        } catch (SaisieInvalideException e) {
+        } catch (SaisieInvalideException | StreamingException e) {
             System.out.println("Saisie invalide : " + e.getMessage());
         }
-        //TODO
-//        if(arret == true) {
-//            try {
-//                Streamer.arreter();
-//            } catch (StreamingException e) {
-//                System.out.println(e.getMessage());
-//            }
-//        }
+    }
 
+    public void arretStreamingForced() {
+        boolean arret = false;
+        try {
+            if(streamer != null || streamer.estEnCours())
+                streamer.arreter();
+
+        } catch (SaisieInvalideException | StreamingException e) {
+            System.out.println("Saisie invalide : " + e.getMessage());
+        }
     }
 
     public void sauvegarder(Stockage s) throws IOException {

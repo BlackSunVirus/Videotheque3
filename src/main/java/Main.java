@@ -84,9 +84,10 @@ public class Main {
                         break;
                     case 0:
                         try {
+                            c.arretStreamingForced();
                             c.sauvegarder(stockage);
                             System.out.println("Sauvegarde effectuée avec succès !");
-                        } catch (IOException e) {
+                        } catch (IOException | StreamingException e) {
                             System.err.println("Erreur lors de l'enregistrement " + e);
                         }
                         System.out.println("Au revoir !");
