@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
-public class Streamer implements Runnable {
+public class Streamer {
     private final String NCAMERA = "HP True Vision HD Camera";
     private final String NMICRO = "Réseau de microphones (Technologie Intel® Smart Sound pour microphones numériques)";
     private final String NMICRO2 = "@device_cm_{33D9A762-90C8-11D0-BD43-00A0C911CE86}\\wave_{0BEAED99-CCAF-47DB-8D1A-CCF8E7CE5422}";
@@ -159,7 +159,7 @@ public class Streamer implements Runnable {
      attend 5 s au maximum, sinon destroy(). */
     public void arreter() {
         if (processus == null) {
-            System.out.println("Pas de stream en cours");
+            this.fluxEnCours = null;
             return;
         }
         try {
@@ -168,17 +168,11 @@ public class Streamer implements Runnable {
             //Si le délai de 5 secs est dépassé
             if(!processus.waitFor(5, TimeUnit.SECONDS))
                 processus.destroyForcibly();
-            this.processus = null;
-            this.fluxEnCours = null;
         } catch (IOException | InterruptedException e) {
             System.err.println(e.getMessage());
         } finally {
             this.processus = null;
             this.fluxEnCours = null;
-            if (this.thread != null) {
-                this.thread.interrupt();
-                this.thread = null;
-            }
         }
     }
 
@@ -254,12 +248,6 @@ public class Streamer implements Runnable {
             pb.redirectError(ProcessBuilder.Redirect.DISCARD);
             this.processus = pb.start();
 
-            //arretDemande = false;
-            thread = new Thread(this);
-            thread.setName("Lecteur-" + fluxEnCours);
-            thread.setDaemon(true);
-            thread.start();
-
             // attendre quelque secondes avant vérif
             Thread.sleep(2000);
             if(!processus.isAlive()) {
@@ -275,19 +263,4 @@ public class Streamer implements Runnable {
             System.err.println(e.getMessage());
         }
     }
-
-    @Override
-    public void run() {
-        // try with resources pour fermer automatiquement le reader
-        try (BufferedReader sortieProcessus = new BufferedReader(new InputStreamReader(processus.getInputStream()))) {
-            String line;
-            // lire tant que FFmpeg écrit
-            while ((line = sortieProcessus.readLine()) != null) {
-                System.out.println("flux en cours : " + fluxEnCours + " " + line);
-            }
-        } catch (IOException e) {
-            System.out.println("Erreur de lecture du fichier.");
-        }
-    }
-
 }
