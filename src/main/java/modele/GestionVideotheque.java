@@ -11,6 +11,7 @@ public interface GestionVideotheque {
     List<Video> listerVideos() throws VideothequeVideException;
     Video rechercherVideo(String titre)
             throws VideoIntrouvableException, VideothequeVideException;
+    Video rechercherVideoEx(String titre, String extension);
     void supprimerVideo(String titre)
             throws VideoIntrouvableException, VideothequeVideException;
     void lireVideo(String titre)

@@ -22,7 +22,9 @@ public class Controller {
     public static Scanner scan = new Scanner(System.in);
     private Videotheque videotheque = new Videotheque();
     private LecteurVideo lecteur;
+    private Streamer streamer;
     private static final List<String> formatFichierNumAccepte = List.of("AVI", "MP4");
+    private static final String urlServeur = "rtsp://172.16.120.28:8554/";
 
     // Affiche le menu principal
     public void afficherMenu() {
@@ -239,20 +241,22 @@ public class Controller {
 
     public void demarrerStream() {
         String titre = null;
+        String extension = null;
         boolean boucle = false;
-        String flux =null;
+        String flux = "";
         try {
             titre = saisieString("Saisir le nom de la vidéo à diffuser : ");
+            extension = saisieString("Saisir l'extension de la vidéo à diffuser :");
             String reponse = saisieString("Voulez-vous lire la vidéo en boucle ? (oui/non)");
             if(reponse.equalsIgnoreCase("oui")) {
                 boucle = true;
             }
-            flux = saisieString("Quel protocole de Stream souhaitez-vous ? (rtsp/rtmp)");
-            if(flux.equalsIgnoreCase("rtsp")) {
-                flux = "rtsp";
-            }else if (flux.equalsIgnoreCase("rtmp")) {
-                flux = "rtmp";
-            }
+            flux = saisieString("Quel répertoire de Stream souhaitez-vous ? --> monsite.com/live");
+//            if(flux.equalsIgnoreCase("rtsp")) {
+//                flux = "rtsp";
+//            }else if (flux.equalsIgnoreCase("rtmp")) {
+//                flux = "rtmp";
+//            }
 
         } catch (SaisieInvalideException | VideoIntrouvableException | VideothequeVideException | StreamingException  e) {
             System.out.println(e.getMessage());
@@ -260,24 +264,51 @@ public class Controller {
         //TODO
         // FichierVideo video, String nomFlux, boolean boucle
         // rtsp ou rtmp // if "rtsp rtsp://172.16.120.28:554/live" | "flv rtmp://172.16.120.28:1935/live"
-        //Video video = videotheque.rechercherVideo(titre);
-        //Streamer.diffuserFichier(video, flux, boucle);
+        Video video = videotheque.rechercherVideoEx(titre, extension);
+        if(video == null) {
+            throw new VideoIntrouvableException("La vidéo est introuvable");
+        }
+        if(!(video instanceof FichierVideo))
+            throw new SaisieInvalideException("Veuillez saisir un fichier vidéo");
+        if(streamer!=null && streamer.estEnCours())
+            streamer.arreter();
+        streamer = new Streamer(urlServeur);
+        streamer.diffuserFichier((FichierVideo)video, flux, boucle);
+        System.out.println("Streaming de " + video.getTitre() + " lancée. Bon visionage");
 
         }
     public void diffuserCameraController() {
 
+        String flux = null;
+        String reponse = null;
+        boolean son = false;
+        try {
+            flux = saisieString("Quel répertoire de Stream souhaitez-vous ? --> monsite.com/live");
+            reponse = saisieString("Voulez-vous lire la vidéo en boucle ? (oui/non)");
+            if(reponse.equalsIgnoreCase("oui")) {
+                son = true;
+            }
+        } catch (SaisieInvalideException e) {
+            throw new SaisieInvalideException(e.getMessage());
+        }
 
-        //public void diffuserCamera(String nomFlux)
+        if(streamer!=null && streamer.estEnCours())
+            streamer.arreter();
+        streamer = new Streamer(urlServeur);
+        streamer.diffuserCamera(flux, son);
+        System.out.println("Streaming de la caméra lancée. Bonne diffusion");
+
     }
 
     public void arretStreaming() {
         boolean arret = false;
-
+        if(streamer != null || !streamer.estEnCours())
+            throw new StreamingException("Aucun stream en cours");
         try {
             String choix = saisieString("Voulez-vous vraiment arrêter le streaming ? (O/N)");
             if (choix.equalsIgnoreCase("O")) {
-               arret = true;
-                System.out.println("Arrêt en cours");
+               streamer.arreter();
+               System.out.println("Arrêt en cours");
             }
         } catch (SaisieInvalideException e) {
             System.out.println("Saisie invalide : " + e.getMessage());

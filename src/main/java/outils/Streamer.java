@@ -158,7 +158,7 @@ public class Streamer implements Runnable {
     /** Arrête proprement ffmpeg : envoie "q" sur son entrée standard,
      attend 5 s au maximum, sinon destroy(). */
     public void arreter() {
-        if (processus == null || !estEnCours()) {
+        if (processus == null) {
             System.out.println("Pas de stream en cours");
             return;
         }
@@ -167,11 +167,18 @@ public class Streamer implements Runnable {
             processus.getOutputStream().flush();
             //Si le délai de 5 secs est dépassé
             if(!processus.waitFor(5, TimeUnit.SECONDS))
-                processus.destroy();
+                processus.destroyForcibly();
             this.processus = null;
             this.fluxEnCours = null;
         } catch (IOException | InterruptedException e) {
             System.err.println(e.getMessage());
+        } finally {
+            this.processus = null;
+            this.fluxEnCours = null;
+            if (this.thread != null) {
+                this.thread.interrupt();
+                this.thread = null;
+            }
         }
     }
 
@@ -237,6 +244,9 @@ public class Streamer implements Runnable {
     private void lancer(List<String> commande, String nomFlux)
             throws StreamingException {
         try {
+            if(processus != null) {
+                arreter();
+            }
             ProcessBuilder pb = new ProcessBuilder(commande);
             // Fusionne les flux d'erreurs de FFmpeg avec la sortie standard
             //pb.redirectErrorStream(true);
@@ -254,15 +264,13 @@ public class Streamer implements Runnable {
             Thread.sleep(2000);
             if(!processus.isAlive()) {
                 int codeErreur = processus.exitValue();
-                this.processus = null;
-                this.fluxEnCours = null;
+                arreter();
                 throw new StreamingException("Erreur du stream : processus arrêté avec code : " + codeErreur);
             }
 
             System.out.println(getUrlLecture());
         } catch (IOException | InterruptedException e) {
-            this.processus = null;
-            this.fluxEnCours = null;
+            arreter();
             Thread.currentThread().interrupt();
             System.err.println(e.getMessage());
         }
@@ -275,7 +283,7 @@ public class Streamer implements Runnable {
             String line;
             // lire tant que FFmpeg écrit
             while ((line = sortieProcessus.readLine()) != null) {
-                System.out.println(line);
+                System.out.println("flux en cours : " + fluxEnCours + " " + line);
             }
         } catch (IOException e) {
             System.out.println("Erreur de lecture du fichier.");

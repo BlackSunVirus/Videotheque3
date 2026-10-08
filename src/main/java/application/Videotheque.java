@@ -93,6 +93,18 @@ public class Videotheque implements GestionVideotheque {
     }
 
     @Override
+    public Video rechercherVideoEx(String titre, String extension) throws VideoIntrouvableException, VideothequeVideException {
+        // TODO
+        System.out.println(videotheque);
+        if (videotheque.isEmpty())
+            throw new VideothequeVideException("La vidéothèque est vide");
+        for (Video video : videotheque)
+            if (video.getTitre().equalsIgnoreCase(titre) && video.getSupport().equalsIgnoreCase(extension))
+                return video;
+        throw new VideoIntrouvableException("La vidéo " + titre + " est introuvable au format " + extension);
+    }
+
+    @Override
     public void supprimerVideo(String titre) throws VideoIntrouvableException, VideothequeVideException {
         // TODO
         Video v = rechercherVideo(titre);
