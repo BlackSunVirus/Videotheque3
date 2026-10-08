@@ -16,6 +16,8 @@ import java.util.Locale;
 import java.util.Scanner;
 import java.util.stream.Stream;
 
+import static service.Authentification.connexion;
+
 public class Controller {
     public static Scanner scan = new Scanner(System.in);
     private Videotheque videotheque = new Videotheque();
@@ -38,6 +40,18 @@ public class Controller {
         System.out.println("9. Arrêter le streaming");
         System.out.println("0. Quitter");
         System.out.println("=====================================");
+    }
+
+    public static void authentification(){
+        System.out.println("Entrez le mot de passe pour accéder au programme : ");
+        String mdp = scan.nextLine();
+
+        //String mdpHash = hasherMdp(mdp);
+        if(!connexion(mdp)){
+            System.out.println("Mot de passe invalide. Adieu !");
+            System.exit(0); //Peut-être un peu radical faire une boucle ? while(false) ou compteur de 3 !
+        }
+
     }
 
     public void peuplerVideotheque(String extension) {

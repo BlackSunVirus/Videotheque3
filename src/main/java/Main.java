@@ -10,8 +10,12 @@ import java.time.LocalDate;
 import java.util.InputMismatchException;
 import java.util.stream.Stream;
 
+import static application.Controller.authentification;
+
 public class Main {
     public static void main(String[] args) {
+
+        authentification();
 
         Controller c = new Controller();
         StockageJson stockage = new StockageJson("donnees/videotheque.json");
@@ -40,6 +44,7 @@ public class Main {
 //        FichierVideo v  = new VideoAvi("planet", "auteur", LocalDate.now(), 1);
 //        s.diffuserFichier(v, "film", false);
 //        s.diffuserCamera("film", false);
+
 
         int choix = -1;
 
