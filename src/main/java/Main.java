@@ -10,8 +10,12 @@ import java.time.LocalDate;
 import java.util.InputMismatchException;
 import java.util.stream.Stream;
 
+import static application.Controller.authentification;
+
 public class Main {
     public static void main(String[] args) {
+
+        authentification();
 
         Controller c = new Controller();
         StockageJson stockage = new StockageJson("donnees/videotheque.json");
@@ -35,10 +39,11 @@ public class Main {
         }
 
         /** Pour tester la classe Streamer **/
-        //Streamer s = new Streamer("rtsp://127.0.0.1:8554/");
+        //Streamer s = new Streamer("rtsp://172.16.120.28:8554/");
         //FichierVideo v  = new VideoMp4("planet", "auteur", LocalDate.now(), 1);
         //FichierVideo v  = new VideoAvi("planet", "auteur", LocalDate.now(), 1);
         //s.diffuserFichier(v, "film", false);
+        //s.diffuserCamera("film", false);
 
         int choix = -1;
 
